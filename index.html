@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#060a13">
+<title>NTT Esports</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{--bg:#060a13;--surface:#111a2b;--surface2:#17243a;--line:#273650;--muted:#91a2bb;--text:#f4f7ff;--blue:#58a6ff;--cyan:#53e0d0;--gold:#ffcb62;--green:#50dfa1;--red:#ff7582;--glass:rgba(17, 26, 43, 0.85)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 0%,#1a365d 0%,transparent 60%),radial-gradient(circle at 100% 100%,#173d4b33 0%,transparent 50%);z-index:-1}
+button,input,select{font:inherit}button{cursor:pointer;touch-action:manipulation;transition:all 0.2s}
+.app{max-width:960px;margin:auto;padding:0 14px calc(30px + env(safe-area-inset-bottom));background:var(--bg)}
+.topbar{padding:calc(17px + env(safe-area-inset-top)) 2px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}.brandmark{height:44px;width:44px;flex:none;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#ffcf70,#f58a35);color:#172033;font-size:23px;font-weight:1000;box-shadow:0 7px 24px #ffad4540}
+.brandname{font-weight:950;letter-spacing:1.2px;font-size:18px;line-height:1.15;color:#fff}.brandname span{color:var(--gold)}.tagline{font-size:10px;color:var(--muted);letter-spacing:1.4px;margin-top:4px;text-transform:uppercase}
+.top-actions{display:flex;gap:7px}.iconbtn{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:#142035;color:#dce8fa;font-size:17px}
+.iconbtn:active{transform:scale(0.92);background:#1a2b46}
+
+/* Global Leaderboard - Đã fix lỗi đóng khung chữ khi xuất ảnh */
+.glb-header{text-align:center;margin-bottom:26px;margin-top:8px}
+.glb-title{font-size:24px;font-weight:950;letter-spacing:1.2px;margin:0;color:#ffffff;text-shadow:0 2px 14px rgba(88,166,255,0.35)}
+.glb-sub{font-size:11px;color:var(--cyan);margin-top:6px;letter-spacing:1.2px;font-weight:800;text-transform:uppercase}
+
+/* Podium Top 3 */
+.podium{display:grid;grid-template-columns:1fr 1.18fr 1fr;gap:10px;align-items:end;margin-bottom:24px;padding:12px 4px 0}
+.podium-card{background:linear-gradient(145deg,#131f33,#0d1522);border:1px solid var(--line);border-radius:18px;padding:16px 8px;text-align:center;position:relative;box-shadow:0 8px 24px rgba(0,0,0,0.45)}
+.podium-card.rank1{background:linear-gradient(145deg,#1c2d4a,#121c2e);border:1.5px solid #5a82b8;transform:translateY(-12px);box-shadow:0 12px 32px rgba(255, 203, 98, 0.18)}
+.podium-rank{font-size:11px;font-weight:900;letter-spacing:1px;color:var(--muted);margin-bottom:10px;text-transform:uppercase}
+.podium-card.rank1 .podium-rank{color:var(--gold)}
+.avatar{width:52px;height:52px;border-radius:50%;margin:0 auto 10px;display:grid;place-items:center;font-size:22px;background:#1b2942;border:2px solid var(--line);position:relative}
+.podium-card.rank1 .avatar{width:66px;height:66px;font-size:28px;background:linear-gradient(135deg,#ffcb62,#f58a35);color:#121c2e;border-color:#ffeb99;box-shadow:0 0 20px rgba(255, 203, 98, 0.35)}
+.crown{position:absolute;top:-22px;font-size:24px;left:50%;transform:translateX(-50%)}
+.team-title{font-size:13px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:4px;color:#e6eefc}
+.podium-card.rank1 .team-title{font-size:15px;color:#ffffff}
+.team-score{font-size:13px;color:var(--green);font-weight:900}
+
+/* Tabs & Panels */
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px;background:var(--glass);border:1px solid var(--line);border-radius:16px;margin-bottom:16px;position:sticky;top:8px;z-index:10;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.tab{border:0;border-radius:12px;background:transparent;color:var(--muted);padding:12px 4px;font-size:13px;font-weight:800}.tab.active{background:#243a58;color:#fff;box-shadow:inset 0 0 0 1px #395879}
+.panel{display:none;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#121d30,#0d1524);padding:16px;margin-bottom:16px;box-shadow:0 8px 24px rgba(0,0,0,0.25)}.panel.active{display:block}
+.panelhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:16px}.paneltitle{font-size:16px;font-weight:900;margin:0;text-transform:uppercase;letter-spacing:0.5px;color:#fff}.panelsub{font-size:11px;color:var(--muted);margin-top:4px}
+.count{font-size:11px;color:var(--cyan);background:rgba(83, 224, 208, 0.15);padding:6px 10px;border-radius:20px;font-weight:850;white-space:nowrap;border:1px solid rgba(83, 224, 208, 0.3)}
+
+/* Forms */
+.field{margin-bottom:14px}.field label{display:block;color:#aebdd1;font-size:11px;font-weight:800;margin:0 0 6px;text-transform:uppercase;letter-spacing:0.5px}.field input,.field select{width:100%;min-height:48px;background:#080e1a;border:1px solid #2a3a53;color:var(--text);border-radius:12px;padding:12px 14px;outline:none;font-size:14px}.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(88, 166, 255, 0.2)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* Stepper for Kills */
+.stepper{display:flex;background:#080e1a;border:1px solid #2a3a53;border-radius:12px;overflow:hidden;height:48px}
+.stepper button{flex:none;width:48px;background:#142035;border:none;color:var(--text);font-size:20px;font-weight:bold;display:grid;place-items:center}
+.stepper button:active{background:#1c2d4a}
+.stepper input{flex:1;border:none;background:transparent;text-align:center;font-size:16px;font-weight:bold;padding:0;min-height:unset;border-radius:0}
+.stepper input:focus{box-shadow:none}
+
+/* Buttons */
+.btn{border:0;border-radius:12px;padding:14px 16px;font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px}.btn:active{transform:scale(0.98)}
+.primary{background:linear-gradient(135deg,#68b4ff,#3989ed);color:#061426}.secondary{background:#22334c;color:#eaf2ff;border:1px solid #314968}.goldbtn{background:linear-gradient(135deg,#ffdc85,#ffb940);color:#241b09}.danger{background:#482834;color:#ffb6bd;border:1px solid #6a3544}.wide{width:100%}
+.xbtn{border:0;background:#253449;color:#ff9ca7;border-radius:8px;width:32px;height:32px;font-size:16px;display:grid;place-items:center;flex:none}
+
+/* Lists & History */
+.addline{display:flex;gap:8px}.addline input{flex:1;min-width:0}
+.team-list{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.team{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#0c1625;border:1px solid #24354e;border-radius:12px;padding:12px 14px}
+.team-name{font-size:14px;font-weight:800;overflow-wrap:anywhere}.team-no{color:var(--muted);font-size:11px;margin-right:10px;font-weight:900;background:#1c2d46;padding:4px 8px;border-radius:6px}
+
+.rulebox{border:1px solid #293c57;border-radius:14px;overflow:hidden;margin-top:12px;background:#080e1a}.rulebox summary{padding:14px;color:#b9d9ff;font-size:13px;font-weight:850;cursor:pointer;background:#15243a;user-select:none}.rulecontent{padding:14px}.rulegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.rulegrid .field{margin:0}.rulegrid input{min-height:42px;padding:8px}
+
+.history{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.history-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;border:1px solid #263750;border-radius:12px;background:#0c1625;position:relative;overflow:hidden}
+.history-item::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--blue)}
+.history-main{min-width:0}.history-team{font-size:13px;font-weight:900;overflow-wrap:anywhere;color:#fff}.history-meta{font-size:11px;color:var(--muted);margin-top:4px;font-weight:600}.history-points{font-size:14px;font-weight:950;color:var(--green);white-space:nowrap;background:rgba(80, 223, 161, 0.12);padding:4px 8px;border-radius:8px}
+.empty{color:var(--muted);text-align:center;padding:28px 10px;font-size:13px;border:1px dashed #2b3b54;border-radius:14px;font-weight:600}
+
+/* Table - Tối ưu hiển thị đủ 6 cột trên mọi màn hình & khi xuất ảnh */
+.tablewrap{overflow-x:auto;border:1px solid #293b55;border-radius:14px;background:#0b121d}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th{background:#152236;color:#9eb2cd;font-size:10px;letter-spacing:0.6px;text-transform:uppercase;padding:13px 6px;text-align:center;white-space:nowrap;font-weight:900;border-bottom:2px solid #24344c}
+td{padding:13px 6px;border-bottom:1px solid #1a273b;text-align:center;white-space:nowrap;font-weight:700;color:#dce6f7}
+td:nth-child(2),th:nth-child(2){text-align:left;padding-left:10px}
+tbody tr:first-child{background:rgba(255, 203, 98, 0.08)}
+.rank{font-size:15px}.score{color:var(--green);font-weight:950;font-size:14px}.teamcell{font-weight:900;max-width:130px;overflow:hidden;text-overflow:ellipsis;color:#ffffff}
+
+.bxh-actions{display:flex;gap:10px;margin-top:16px}.bxh-actions button{flex:1}
+.tip{font-size:11px;color:var(--muted);line-height:1.5;margin:12px 2px 0;font-style:italic}
+.footer{text-align:center;color:#4a6180;font-size:11px;padding:10px 0 20px;font-weight:600}
+
+/* Chế độ chuyên dụng khi chụp ảnh (Export Mode) - Fix sạch lỗi mờ, tối và mất cột */
+.exporting-mode{width:680px !important;max-width:680px !important;padding:28px !important;background:#060a13 !important;margin:0 auto !important}
+.exporting-mode *{animation:none !important;transition:none !important;opacity:1 !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
+.exporting-mode .tablewrap{overflow:visible !important}
+.exporting-mode table{width:100% !important;min-width:100% !important;font-size:14px !important}
+.exporting-mode th,.exporting-mode td{padding:14px 12px !important}
+.exporting-mode .teamcell{max-width:240px !important}
+.exporting-mode .top-actions,.exporting-mode .tabs,.exporting-mode .bxh-actions,.exporting-mode .tip{display:none !important}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(4, 8, 16, 0.85);backdrop-filter:blur(5px);display:none;place-items:center;z-index:999;padding:20px}
+.modal-box{background:linear-gradient(145deg,#131f33,#0d1522);border:1px solid #314968;border-radius:20px;padding:24px;width:100%;max-width:340px;box-shadow:0 16px 40px rgba(0,0,0,0.6);text-align:center}
+.modal-title{font-size:18px;font-weight:900;margin:0 0 10px;color:#fff}
+.modal-desc{font-size:13px;color:var(--muted);margin:0 0 24px;line-height:1.5}
+.modal-actions{display:flex;gap:10px}
+.modal-actions button{flex:1;padding:12px;font-size:14px;font-weight:800;border-radius:12px;border:none}
+.modal-btn-cancel{background:#22334c;color:#fff}
+.modal-btn-confirm{background:var(--red);color:#fff}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#ffffff;color:#102033;padding:12px 20px;border-radius:30px;font-size:13px;font-weight:900;box-shadow:0 10px 30px rgba(0,0,0,0.5);transition:all 0.25s ease;z-index:1000;max-width:90%;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="app" id="appContainer">
+<header class="topbar">
+ <div class="brand"><div class="brandmark">N</div><div><div class="brandname"><span>NTT</span> ESPORTS</div><div class="tagline">Custom Tournament Manager</div></div></div>
+ <div class="top-actions">
+  <button class="iconbtn" title="Xuất ảnh bảng xếp hạng" onclick="exportImage()">▧</button>
+  <button class="iconbtn" title="Làm mới giải" onclick="promptReset()">↻</button>
+ </div>
+</header>
+
+<div class="glb-header">
+ <div class="glb-title">Global Leaderboard</div>
+ <div class="glb-sub">NTT ESPORTS • FREE FIRE CUSTOM</div>
+</div>
+
+<div class="podium" id="podiumArea"></div>
+
+<nav class="tabs">
+ <button class="tab active" data-tab="rankPanel" onclick="showTab('rankPanel',this)">🏆 Xếp hạng</button>
+ <button class="tab" data-tab="entryPanel" onclick="showTab('entryPanel',this)">＋ Nhập điểm</button>
+ <button class="tab" data-tab="teamPanel" onclick="showTab('teamPanel',this)">♟ Quản lý</button>
+</nav>
+
+<main>
+<section class="panel active" id="rankPanel">
+ <div class="panelhead"><div><h2 class="paneltitle">Bảng Xếp Hạng Chi Tiết</h2><div class="panelsub">Thứ hạng được tính theo tổng điểm</div></div><span class="count" id="rankCount">0 ĐỘI</span></div>
+ <div class="tablewrap">
+  <table>
+   <thead><tr><th>Hạng</th><th>Tên đội</th><th>Trận</th><th>Kill</th><th>Điểm Top</th><th>Tổng</th></tr></thead>
+   <tbody id="rankBody"><tr><td colspan="6" class="empty">Chưa có dữ liệu thi đấu</td></tr></tbody>
+  </table>
+ </div>
+ <div class="bxh-actions"><button class="goldbtn btn" onclick="exportImage()">▧ Xuất Ảnh BXH Chuẩn HD</button><button class="secondary btn" onclick="exportCSV()">⇩ Tải Excel/CSV</button></div>
+ <p class="tip">Mẹo: Nhấn "Xuất Ảnh BXH Chuẩn HD" để tải ngay ảnh bảng xếp hạng sắc nét, đầy đủ tất cả các cột điểm.</p>
+</section>
+
+<section class="panel" id="entryPanel">
+ <div class="panelhead"><div><h2 class="paneltitle">Nhập Kết Quả Trận</h2><div class="panelsub">Cập nhật điểm cho từng đội sau mỗi ván</div></div><span class="count">TỰ TÍNH ĐIỂM</span></div>
+ <div class="field"><label>CHỌN ĐỘI THI ĐẤU</label><select id="entryTeam"><option value="">Chưa có đội — hãy thêm đội trước</option></select></div>
+ <div class="row2">
+  <div class="field"><label>THỨ HẠNG (TOP)</label><select id="placement"><option value="">-- Chọn Top --</option><option value="1">Top 1 (Booyah!)</option><option value="2">Top 2</option><option value="3">Top 3</option><option value="4">Top 4</option><option value="5">Top 5</option><option value="6">Top 6</option><option value="7">Top 7</option><option value="8">Top 8</option><option value="9">Top 9</option><option value="10">Top 10</option><option value="11">Top 11</option><option value="12">Top 12</option></select></div>
+  <div class="field"><label>SỐ KILL ĐẠT ĐƯỢC</label>
+    <div class="stepper">
+        <button type="button" onclick="adjKill(-1)">-</button>
+        <input id="kills" type="number" min="0" step="1" inputmode="numeric" value="0">
+        <button type="button" onclick="adjKill(1)">+</button>
+    </div>
+  </div>
+ </div>
+ <button class="primary wide btn" onclick="addResult()">LƯU KẾT QUẢ VÁN ĐẤU</button>
+ <div class="panelhead" style="margin:24px 0 14px"><div><h3 class="paneltitle" style="font-size:14px">Lịch Sử Nhập Điểm</h3><div class="panelsub">Xem và xóa nếu nhập sai</div></div><span class="count" id="historyCount">0 LƯỢT</span></div>
+ <div class="history" id="history"><div class="empty">Chưa có dữ liệu nào được lưu.</div></div>
+</section>
+
+<section class="panel" id="teamPanel">
+ <div class="panelhead"><div><h2 class="paneltitle">Danh Sách Các Đội</h2><div class="panelsub">Thêm các đội tham gia giải đấu</div></div><span class="count" id="teamCount">0 ĐỘI</span></div>
+ <div class="addline"><input id="teamName" aria-label="Tên đội" placeholder="Nhập tên đội..." maxlength="28"><button class="primary btn" onclick="addTeam()">THÊM ĐỘI</button></div>
+ <div class="team-list" id="teamList"><div class="empty">Bạn chưa thêm đội nào.</div></div>
+ <details class="rulebox" open>
+  <summary>⚙ TÙY CHỈNH LUẬT TÍNH ĐIỂM</summary>
+  <div class="rulecontent">
+   <div class="field"><label>ĐIỂM CHO 1 KILL</label><input id="killPoint" type="number" min="0" max="100" value="1" inputmode="numeric"></div>
+   <div class="rulegrid" id="ruleGrid"></div>
+   <p class="tip">Tổng điểm = (Kill × Hệ số Kill) + Điểm Top tương ứng. Thay đổi luật sẽ tự động tính lại toàn bộ BXH.</p>
+   <button class="secondary btn wide" style="margin-top:14px" onclick="restoreRules()">Khôi phục luật mặc định</button>
+  </div>
+ </details>
+ <button class="danger btn wide" style="margin-top:16px" onclick="promptReset()">XÓA TOÀN BỘ DỮ LIỆU GIẢI</button>
+</section>
+</main>
+<div class="footer">NTT ESPORTS • GLOBAL LEADERBOARD MANAGER</div>
+</div>
+
+<!-- Modal xác nhận -->
+<div class="modal-overlay" id="customModal">
+    <div class="modal-box">
+        <h3 class="modal-title" id="modalTitle">Xác nhận</h3>
+        <p class="modal-desc" id="modalDesc">Bạn có chắc chắn muốn thực hiện hành động này?</p>
+        <div class="modal-actions">
+            <button class="modal-btn-cancel" onclick="closeModal()">Hủy bỏ</button>
+            <button class="modal-btn-confirm" id="modalConfirmBtn">Đồng ý</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const ruleDefaults={killPoint:1,p1:12,p2:9,p3:8,p4:7,p5:6,p6:5,p7:4,p8:3,p9:2,p10:1,p11:0,p12:0};
+let teams=[],results=[];
+
+let confirmAction = null;
+function showModal(title, desc, actionText, actionCallback) {
+    $('modalTitle').textContent = title;
+    $('modalDesc').textContent = desc;
+    $('modalConfirmBtn').textContent = actionText;
+    confirmAction = actionCallback;
+    $('customModal').style.display = 'grid';
+}
+function closeModal() {
+    $('customModal').style.display = 'none';
+    confirmAction = null;
+}
+$('modalConfirmBtn').addEventListener('click', () => {
+    if(confirmAction) confirmAction();
+    closeModal();
+});
+
+function notify(msg){let t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window._toastTimer);window._toastTimer=setTimeout(()=>t.classList.remove('show'),2500)}
+
+function showTab(id,btn){document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b===btn));}
+
+function save(){localStorage.setItem('ntt_teams',JSON.stringify(teams));localStorage.setItem('ntt_results',JSON.stringify(results));let r={};Object.keys(ruleDefaults).forEach(k=>r[k]=$(k).value);localStorage.setItem('ntt_rules',JSON.stringify(r))}
+
+function load(){try{teams=JSON.parse(localStorage.getItem('ntt_teams')||'[]');results=JSON.parse(localStorage.getItem('ntt_results')||'[]');let r=JSON.parse(localStorage.getItem('ntt_rules')||'{}');Object.keys(ruleDefaults).forEach(k=>$(k).value=r[k]??ruleDefaults[k])}catch(e){teams=[];results=[]}}
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function adjKill(val) {
+    let inp = $('kills');
+    let current = parseInt(inp.value) || 0;
+    let next = current + val;
+    if(next >= 0) inp.value = next;
+}
+
+function addTeam(){let n=$('teamName').value.trim();if(!n)return notify('Bạn chưa nhập tên đội!');if(teams.some(x=>x.toLowerCase()===n.toLowerCase()))return notify('Tên đội này đã tồn tại!');teams.push(n);$('teamName').value='';save();render();notify('Đã thêm đội: '+n)}
+
+function promptDeleteTeam(i){
+    showModal("Xóa đội thi đấu", `Bạn có chắc muốn xóa đội "${teams[i]}" và toàn bộ điểm của đội này?`, "Xóa đội", () => {
+        let n=teams[i];teams.splice(i,1);results=results.filter(r=>r.team!==n);save();render();notify('Đã xóa đội');
+    });
+}
+
+function addResult(){let team=$('entryTeam').value,top=Number($('placement').value),kill=Number($('kills').value);if(!team)return notify('Vui lòng chọn một đội!');if(!top||top<1||top>12)return notify('Vui lòng chọn Top đạt được!');if($('kills').value===''||!Number.isInteger(kill)||kill<0)return notify('Số Kill không hợp lệ!');results.push({team,top,kill,stamp:Date.now()});$('placement').value='';$('kills').value='0';save();render();notify('Đã lưu kết quả thành công!');showTab('rankPanel',document.querySelector('[data-tab="rankPanel"]'))}
+
+function promptDeleteResult(i){
+    showModal("Xóa lượt đấu", "Bạn muốn xóa lượt điểm này? Bảng xếp hạng sẽ tự động tính lại.", "Xóa kết quả", () => {
+        results.splice(i,1);save();render();notify('Đã xóa 1 lượt kết quả');
+    });
+}
+
+function getRules(){let p={};for(let i=1;i<=12;i++)p[i]=Math.max(0,Number($('p'+i).value)||0);return {kill:Math.max(0,Number($('killPoint').value)||0),place:p}}
+
+function standings(){let r=getRules();return teams.map(team=>{let a=results.filter(x=>x.team===team),kills=a.reduce((s,x)=>s+x.kill,0),top=a.reduce((s,x)=>s+r.place[x.top],0);return {team,matches:a.length,kills,top,total:kills*r.kill+top}}).sort((a,b)=>b.total-a.total||b.kills-a.kills||b.top-a.top||a.team.localeCompare(b.team,'vi'))}
+
+function render(){
+let list=$('teamList');list.innerHTML=teams.length?teams.map((t,i)=>`<div class="team"><div class="team-name"><span class="team-no">#${String(i+1).padStart(2,'0')}</span>${esc(t)}</div><button class="xbtn" onclick="promptDeleteTeam(${i})" title="Xóa đội">✕</button></div>`).join(''):'<div class="empty">Chưa có đội nào tham gia.</div>';
+$('entryTeam').innerHTML=teams.length?'<option value="">-- Chọn đội vừa thi đấu --</option>'+teams.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join(''):'<option value="">Chưa có đội — hãy thêm đội trước</option>';
+$('teamCount').textContent=teams.length+' ĐỘI';$('rankCount').textContent=teams.length+' ĐỘI';$('historyCount').textContent=results.length+' LƯỢT';
+
+let s=standings();
+let t1=s[0]||{team:'—',total:0}, t2=s[1]||{team:'—',total:0}, t3=s[2]||{team:'—',total:0};
+
+$('podiumArea').innerHTML=`
+ <div class="podium-card">
+  <div class="podium-rank">Rank 2</div>
+  <div class="avatar">🥈</div>
+  <div class="team-title" title="${esc(t2.team)}">${esc(t2.team)}</div>
+  <div class="team-score">${t2.total} PTS</div>
+ </div>
+ <div class="podium-card rank1">
+  <div class="crown">👑</div>
+  <div class="podium-rank">Rank 1</div>
+  <div class="avatar">🥇</div>
+  <div class="team-title" title="${esc(t1.team)}">${esc(t1.team)}</div>
+  <div class="team-score">${t1.total} PTS</div>
+ </div>
+ <div class="podium-card">
+  <div class="podium-rank">Rank 3</div>
+  <div class="avatar">🥉</div>
+  <div class="team-title" title="${esc(t3.team)}">${esc(t3.team)}</div>
+  <div class="team-score">${t3.total} PTS</div>
+ </div>
+`;
+
+$('rankBody').innerHTML=s.length?s.map((x,i)=>`<tr><td class="rank">${i===0?'🥇':i===1?'🥈':i===2?'🥉':String(i+1)}</td><td class="teamcell">${esc(x.team)}</td><td>${x.matches}</td><td>${x.kills}</td><td>${x.top}</td><td class="score">${x.total}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">Chưa có dữ liệu thi đấu.</td></tr>';
+
+let hist=$('history');hist.innerHTML=results.length?[...results].map((r,i)=>({r,i})).reverse().map(({r,i})=>{let pts=r.kill*getRules().kill+getRules().place[r.top];return `<div class="history-item"><div class="history-main"><div class="history-team">${esc(r.team)}</div><div class="history-meta">Top ${r.top} • ${r.kill} Kill</div></div><div style="display:flex;align-items:center;gap:10px"><span class="history-points">+${pts}đ</span><button class="xbtn" onclick="promptDeleteResult(${i})">✕</button></div></div>`}).join(''):'<div class="empty">Chưa có lượt điểm nào được lưu.</div>'}
+
+function buildRules(){let g=$('ruleGrid');g.innerHTML=Array.from({length:12},(_,i)=>i+1).map(i=>`<div class="field"><label>ĐIỂM TOP ${i}</label><input id="p${i}" type="number" min="0" value="${ruleDefaults['p'+i]}" inputmode="numeric"></div>`).join('')}
+
+function restoreRules(){
+    showModal("Khôi phục luật điểm", "Đưa hệ thống điểm về mặc định (Top 1=12đ, 1 Kill=1đ)?", "Khôi phục", () => {
+        Object.keys(ruleDefaults).forEach(k=>$(k).value=ruleDefaults[k]);save();render();notify('Đã khôi phục luật mặc định');
+    });
+}
+
+function promptReset(){
+    showModal("LÀM MỚI GIẢI ĐẤU", "Xóa sạch toàn bộ danh sách đội và kết quả hiện tại?", "XÓA TẤT CẢ", () => {
+        teams=[];results=[];localStorage.removeItem('ntt_teams');localStorage.removeItem('ntt_results');localStorage.removeItem('ntt_rules');Object.keys(ruleDefaults).forEach(k=>$(k).value=ruleDefaults[k]);render();notify('Đã làm mới toàn bộ giải đấu!');
+    });
+}
+
+function exportCSV(){let s=standings();if(!s.length)return notify('Chưa có dữ liệu để xuất!');let rows=[['Hang','Ten doi','Tran','Kill','Diem Top','Tong diem'],...s.map((x,i)=>[i+1,x.team,x.matches,x.kills,x.top,x.total])];let csv='\uFEFF'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='NTT_bang_xep_hang.csv';a.click();URL.revokeObjectURL(a.href);notify('Đã xuất file CSV')}
+
+// --- HÀM XUẤT ẢNH ĐÃ FIX TRIỆT ĐỂ LỖI TỐI MỜ & MẤT CỘT ---
+function exportImage(){
+    if(!teams.length) return notify('Cần ít nhất 1 đội để xuất ảnh!');
+    
+    // Đảm bảo đang đứng ở tab Bảng xếp hạng khi chụp
+    showTab('rankPanel', document.querySelector('[data-tab="rankPanel"]'));
+    notify('Đang xuất ảnh HD sắc nét...');
+
+    const appEl = $('appContainer');
+    window.scrollTo(0, 0);
+    
+    // Bật chế độ xuất ảnh chuyên dụng (mở rộng khung 680px, tắt animation/opacity, hiện đủ 6 cột)
+    appEl.classList.add('exporting-mode');
+
+    setTimeout(() => {
+        html2canvas(appEl, {
+            backgroundColor: '#060a13',
+            scale: 2,
+            width: 680,
+            windowWidth: 680,
+            scrollX: 0,
+            scrollY: 0,
+            useCORS: true,
+            logging: false
+        }).then(canvas => {
+            appEl.classList.remove('exporting-mode');
+            let a = document.createElement('a');
+            a.download = 'NTT_Global_Leaderboard.png';
+            a.href = canvas.toDataURL('image/png');
+            a.click();
+            notify('📸 Đã tải ảnh BXH sắc nét!');
+        }).catch(err => {
+            appEl.classList.remove('exporting-mode');
+            notify('Có lỗi xảy ra khi tạo ảnh!');
+            console.error(err);
+        });
+    }, 150);
+}
+
+buildRules();load();render();
+Object.keys(ruleDefaults).forEach(k=>$(k).addEventListener('input',()=>{save();render()}));
+$('teamName').addEventListener('keydown',e=>{if(e.key==='Enter')addTeam()});
+$('killPoint').addEventListener('input',()=>{save();render()});
+</script>
+</body>
+</html>
