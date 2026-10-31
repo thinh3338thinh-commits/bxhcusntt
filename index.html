@@ -3,352 +3,2040 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#060a13">
-<title>NTT Esports</title>
+<meta name="theme-color" content="#050811">
+<title>NTT Esports - Hệ Thống Giải Đấu Online</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-:root{--bg:#060a13;--surface:#111a2b;--surface2:#17243a;--line:#273650;--muted:#91a2bb;--text:#f4f7ff;--blue:#58a6ff;--cyan:#53e0d0;--gold:#ffcb62;--green:#50dfa1;--red:#ff7582;--glass:rgba(17, 26, 43, 0.85)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 0%,#1a365d 0%,transparent 60%),radial-gradient(circle at 100% 100%,#173d4b33 0%,transparent 50%);z-index:-1}
-button,input,select{font:inherit}button{cursor:pointer;touch-action:manipulation;transition:all 0.2s}
-.app{max-width:960px;margin:auto;padding:0 14px calc(30px + env(safe-area-inset-bottom));background:var(--bg)}
-.topbar{padding:calc(17px + env(safe-area-inset-top)) 2px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{display:flex;align-items:center;gap:11px;min-width:0}.brandmark{height:44px;width:44px;flex:none;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#ffcf70,#f58a35);color:#172033;font-size:23px;font-weight:1000;box-shadow:0 7px 24px #ffad4540}
-.brandname{font-weight:950;letter-spacing:1.2px;font-size:18px;line-height:1.15;color:#fff}.brandname span{color:var(--gold)}.tagline{font-size:10px;color:var(--muted);letter-spacing:1.4px;margin-top:4px;text-transform:uppercase}
-.top-actions{display:flex;gap:7px}.iconbtn{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:#142035;color:#dce8fa;font-size:17px}
-.iconbtn:active{transform:scale(0.92);background:#1a2b46}
+:root {
+  --bg: #050811;
+  --surface: #0e1626;
+  --surface2: #152238;
+  --surface3: #1e2f4d;
+  --line: #263859;
+  --muted: #8ea2c0;
+  --text: #f4f7ff;
+  --blue: #4da3ff;
+  --cyan: #3be8d5;
+  --gold: #ffcc4d;
+  --silver: #d4e0f0;
+  --bronze: #f0985b;
+  --green: #38e59b;
+  --red: #ff6476;
+  --glass: rgba(14, 22, 38, 0.9);
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% -10%, rgba(77, 163, 255, 0.22) 0%, transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(59, 232, 213, 0.1) 0%, transparent 45%);
+  z-index: -1;
+}
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; touch-action: manipulation; transition: all 0.18s ease; }
+.app {
+  max-width: 960px;
+  margin: auto;
+  padding: 0 14px calc(40px + env(safe-area-inset-bottom));
+}
 
-/* Global Leaderboard - Đã fix lỗi đóng khung chữ khi xuất ảnh */
-.glb-header{text-align:center;margin-bottom:26px;margin-top:8px}
-.glb-title{font-size:24px;font-weight:950;letter-spacing:1.2px;margin:0;color:#ffffff;text-shadow:0 2px 14px rgba(88,166,255,0.35)}
-.glb-sub{font-size:11px;color:var(--cyan);margin-top:6px;letter-spacing:1.2px;font-weight:800;text-transform:uppercase}
+/* Topbar */
+.topbar {
+  padding: calc(14px + env(safe-area-inset-top)) 2px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.brandmark {
+  height: 44px;
+  width: 44px;
+  flex: none;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #ffd466, #f58220);
+  color: #0b1322;
+  font-size: 23px;
+  font-weight: 900;
+  box-shadow: 0 6px 20px rgba(245, 130, 32, 0.35);
+}
+.brandname { font-weight: 900; letter-spacing: 1px; font-size: 17px; line-height: 1.15; color: #fff; }
+.brandname span { color: var(--gold); }
+.tagline {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  margin-top: 3px;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); display: inline-block; flex: none; }
+.sync-dot.online { background: var(--green); box-shadow: 0 0 8px var(--green); }
+.sync-dot.syncing { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+.sync-dot.error { background: var(--red); box-shadow: 0 0 8px var(--red); }
+
+.top-actions { display: flex; gap: 7px; align-items: center; }
+.iconbtn {
+  height: 38px;
+  min-width: 38px;
+  padding: 0 11px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--surface2);
+  color: #dce8fa;
+  font-size: 12px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.iconbtn.admin-active {
+  background: rgba(255, 204, 77, 0.16);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.iconbtn:active { transform: scale(0.93); }
+
+/* Header Giải Đấu */
+.glb-header { text-align: center; margin: 6px 0 22px; }
+.glb-title {
+  font-size: 23px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  margin: 0;
+  color: #ffffff;
+  text-shadow: 0 2px 16px rgba(77, 163, 255, 0.4);
+}
+.glb-sub {
+  font-size: 11px;
+  color: var(--cyan);
+  margin-top: 5px;
+  letter-spacing: 1.4px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
 
 /* Podium Top 3 */
-.podium{display:grid;grid-template-columns:1fr 1.18fr 1fr;gap:10px;align-items:end;margin-bottom:24px;padding:12px 4px 0}
-.podium-card{background:linear-gradient(145deg,#131f33,#0d1522);border:1px solid var(--line);border-radius:18px;padding:16px 8px;text-align:center;position:relative;box-shadow:0 8px 24px rgba(0,0,0,0.45)}
-.podium-card.rank1{background:linear-gradient(145deg,#1c2d4a,#121c2e);border:1.5px solid #5a82b8;transform:translateY(-12px);box-shadow:0 12px 32px rgba(255, 203, 98, 0.18)}
-.podium-rank{font-size:11px;font-weight:900;letter-spacing:1px;color:var(--muted);margin-bottom:10px;text-transform:uppercase}
-.podium-card.rank1 .podium-rank{color:var(--gold)}
-.avatar{width:52px;height:52px;border-radius:50%;margin:0 auto 10px;display:grid;place-items:center;font-size:22px;background:#1b2942;border:2px solid var(--line);position:relative}
-.podium-card.rank1 .avatar{width:66px;height:66px;font-size:28px;background:linear-gradient(135deg,#ffcb62,#f58a35);color:#121c2e;border-color:#ffeb99;box-shadow:0 0 20px rgba(255, 203, 98, 0.35)}
-.crown{position:absolute;top:-22px;font-size:24px;left:50%;transform:translateX(-50%)}
-.team-title{font-size:13px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:4px;color:#e6eefc}
-.podium-card.rank1 .team-title{font-size:15px;color:#ffffff}
-.team-score{font-size:13px;color:var(--green);font-weight:900}
+.podium {
+  display: grid;
+  grid-template-columns: 1fr 1.16fr 1fr;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 20px;
+  padding: 14px 2px 0;
+}
+.podium-card {
+  background: linear-gradient(160deg, #152238, #0b1220);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 15px 8px 13px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+}
+.podium-card.rank1 {
+  background: linear-gradient(160deg, #223556, #111c30);
+  border: 1.5px solid rgba(255, 204, 77, 0.65);
+  transform: translateY(-10px);
+  box-shadow: 0 14px 34px rgba(255, 204, 77, 0.18);
+}
+.podium-card.rank2 { border-color: rgba(212, 224, 240, 0.35); }
+.podium-card.rank3 { border-color: rgba(240, 152, 91, 0.35); }
+.podium-rank { font-size: 10px; font-weight: 900; letter-spacing: 1px; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; }
+.podium-card.rank1 .podium-rank { color: var(--gold); }
+.avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  margin: 0 auto 9px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  background: #1a2842;
+  border: 2px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.podium-card.rank1 .avatar {
+  width: 66px;
+  height: 66px;
+  font-size: 28px;
+  background: linear-gradient(135deg, #ffcf5c, #f58426);
+  color: #121c2e;
+  border-color: #fff0b3;
+  box-shadow: 0 0 20px rgba(255, 204, 77, 0.38);
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.crown { position: absolute; top: -22px; font-size: 23px; left: 50%; transform: translateX(-50%); }
+.team-title { font-size: 13px; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 3px; color: #e6eefc; padding: 0 4px; }
+.podium-card.rank1 .team-title { font-size: 15px; color: #ffffff; font-weight: 900; }
+.team-score { font-size: 14px; color: var(--green); font-weight: 900; }
+.team-submeta { font-size: 10px; color: var(--muted); margin-top: 3px; font-weight: 700; }
 
-/* Tabs & Panels */
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px;background:var(--glass);border:1px solid var(--line);border-radius:16px;margin-bottom:16px;position:sticky;top:8px;z-index:10;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
-.tab{border:0;border-radius:12px;background:transparent;color:var(--muted);padding:12px 4px;font-size:13px;font-weight:800}.tab.active{background:#243a58;color:#fff;box-shadow:inset 0 0 0 1px #395879}
-.panel{display:none;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#121d30,#0d1524);padding:16px;margin-bottom:16px;box-shadow:0 8px 24px rgba(0,0,0,0.25)}.panel.active{display:block}
-.panelhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:16px}.paneltitle{font-size:16px;font-weight:900;margin:0;text-transform:uppercase;letter-spacing:0.5px;color:#fff}.panelsub{font-size:11px;color:var(--muted);margin-top:4px}
-.count{font-size:11px;color:var(--cyan);background:rgba(83, 224, 208, 0.15);padding:6px 10px;border-radius:20px;font-weight:850;white-space:nowrap;border:1px solid rgba(83, 224, 208, 0.3)}
+/* Navigation Tabs */
+.tabs {
+  display: flex;
+  gap: 5px;
+  padding: 6px;
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  margin-bottom: 16px;
+  position: sticky;
+  top: 8px;
+  z-index: 20;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  overflow-x: auto;
+}
+.tab {
+  flex: 1;
+  min-width: fit-content;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--muted);
+  padding: 11px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+  position: relative;
+}
+.tab.active {
+  background: linear-gradient(135deg, #253c5e, #1b2d48);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px #3d5d8a;
+}
+.badge-dot {
+  background: var(--red);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 1px 6px;
+  border-radius: 10px;
+  margin-left: 4px;
+}
+
+/* Panels */
+.panel {
+  display: none;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: linear-gradient(155deg, #111c30, #0b1220);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+}
+.panel.active { display: block; }
+.panelhead { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.paneltitle { font-size: 15px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; color: #fff; }
+.panelsub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.count {
+  font-size: 11px;
+  color: var(--cyan);
+  background: rgba(59, 232, 213, 0.12);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-weight: 800;
+  white-space: nowrap;
+  border: 1px solid rgba(59, 232, 213, 0.3);
+}
+
+/* Sub-mode switch */
+.mode-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: #080d18;
+  padding: 5px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  margin-bottom: 14px;
+}
+.mode-btn {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 9px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.mode-btn.active {
+  background: var(--surface3);
+  color: var(--gold);
+  box-shadow: inset 0 0 0 1px rgba(255, 204, 77, 0.35);
+}
 
 /* Forms */
-.field{margin-bottom:14px}.field label{display:block;color:#aebdd1;font-size:11px;font-weight:800;margin:0 0 6px;text-transform:uppercase;letter-spacing:0.5px}.field input,.field select{width:100%;min-height:48px;background:#080e1a;border:1px solid #2a3a53;color:var(--text);border-radius:12px;padding:12px 14px;outline:none;font-size:14px}.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(88, 166, 255, 0.2)}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field { margin-bottom: 13px; }
+.field label { display: block; color: #b4c5dc; font-size: 11px; font-weight: 800; margin: 0 0 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.field input, .field select, .field textarea {
+  width: 100%;
+  min-height: 45px;
+  background: #080d18;
+  border: 1px solid #283a56;
+  color: var(--text);
+  border-radius: 12px;
+  padding: 10px 13px;
+  outline: none;
+  font-size: 14px;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(77, 163, 255, 0.18);
+}
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-/* Stepper for Kills */
-.stepper{display:flex;background:#080e1a;border:1px solid #2a3a53;border-radius:12px;overflow:hidden;height:48px}
-.stepper button{flex:none;width:48px;background:#142035;border:none;color:var(--text);font-size:20px;font-weight:bold;display:grid;place-items:center}
-.stepper button:active{background:#1c2d4a}
-.stepper input{flex:1;border:none;background:transparent;text-align:center;font-size:16px;font-weight:bold;padding:0;min-height:unset;border-radius:0}
-.stepper input:focus{box-shadow:none}
+/* Upload Logo Box */
+.logo-upload-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #080d18;
+  border: 1px dashed #344d73;
+  border-radius: 14px;
+  padding: 12px;
+}
+.logo-preview {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #142036;
+  border: 2px solid var(--line);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  overflow: hidden;
+  flex: none;
+}
+.logo-preview img { width: 100%; height: 100%; object-fit: cover; }
+.logo-upload-info { flex: 1; min-width: 0; }
+.logo-upload-btn {
+  display: inline-block;
+  background: #1d2f4d;
+  color: #cbe0ff;
+  border: 1px solid #35527d;
+  padding: 8px 12px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Stepper & Quick Chips */
+.stepper { display: flex; background: #080d18; border: 1px solid #283a56; border-radius: 12px; overflow: hidden; height: 45px; }
+.stepper button { flex: none; width: 44px; background: #142035; border: none; color: var(--text); font-size: 19px; font-weight: 800; }
+.stepper button:active { background: #223556; }
+.stepper input { flex: 1; border: none; background: transparent; text-align: center; font-size: 16px; font-weight: 800; padding: 0; min-height: unset; }
+.quick-chips { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
+.chip {
+  background: #152238;
+  border: 1px solid #2b4063;
+  color: #cbe0ff;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 800;
+}
+.chip:active { transform: scale(0.94); background: var(--blue); color: #050c18; }
+
+/* Batch Entry Rows */
+.batch-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.batch-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1.1fr;
+  gap: 8px;
+  align-items: center;
+  background: #09111f;
+  border: 1px solid #22334d;
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+.batch-row.dup-top { border-color: var(--red); background: rgba(255, 100, 118, 0.08); }
+.batch-team { font-size: 13px; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #fff; display: flex; align-items: center; gap: 6px; }
+.batch-row select, .batch-row input {
+  min-height: 38px;
+  padding: 6px 8px;
+  font-size: 13px;
+  background: #101b2e;
+  border: 1px solid #2b4060;
+  color: #fff;
+  border-radius: 8px;
+  width: 100%;
+}
+.batch-kill-box { display: flex; align-items: center; gap: 4px; }
+.batch-kill-box input { text-align: center; font-weight: 800; }
+.mini-btn {
+  width: 30px;
+  height: 38px;
+  flex: none;
+  border-radius: 8px;
+  border: 1px solid #2b4060;
+  background: #172640;
+  color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+}
 
 /* Buttons */
-.btn{border:0;border-radius:12px;padding:14px 16px;font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px}.btn:active{transform:scale(0.98)}
-.primary{background:linear-gradient(135deg,#68b4ff,#3989ed);color:#061426}.secondary{background:#22334c;color:#eaf2ff;border:1px solid #314968}.goldbtn{background:linear-gradient(135deg,#ffdc85,#ffb940);color:#241b09}.danger{background:#482834;color:#ffb6bd;border:1px solid #6a3544}.wide{width:100%}
-.xbtn{border:0;background:#253449;color:#ff9ca7;border-radius:8px;width:32px;height:32px;font-size:16px;display:grid;place-items:center;flex:none}
+.btn { border: 0; border-radius: 12px; padding: 13px 16px; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.btn:active { transform: scale(0.98); }
+.primary { background: linear-gradient(135deg, #62b0ff, #2f80ed); color: #041020; font-weight: 900; }
+.secondary { background: #1d2d47; color: #eaf2ff; border: 1px solid #314968; }
+.goldbtn { background: linear-gradient(135deg, #ffdc7c, #f7a623); color: #1f1605; font-weight: 900; }
+.successbtn { background: linear-gradient(135deg, #52f2ab, #1ec983); color: #041f14; font-weight: 900; }
+.danger { background: rgba(255, 100, 118, 0.14); color: #ff9eaa; border: 1px solid rgba(255, 100, 118, 0.35); }
+.wide { width: 100%; }
+.sm-btn { padding: 7px 11px; font-size: 11px; border-radius: 9px; }
 
-/* Lists & History */
-.addline{display:flex;gap:8px}.addline input{flex:1;min-width:0}
-.team-list{display:flex;flex-direction:column;gap:8px;margin-top:16px}
-.team{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#0c1625;border:1px solid #24354e;border-radius:12px;padding:12px 14px}
-.team-name{font-size:14px;font-weight:800;overflow-wrap:anywhere}.team-no{color:var(--muted);font-size:11px;margin-right:10px;font-weight:900;background:#1c2d46;padding:4px 8px;border-radius:6px}
+/* Cards cho Đội & Duyệt Đơn */
+.card-list { display: flex; flex-direction: column; gap: 9px; margin-top: 10px; }
+.item-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #0a1322;
+  border: 1px solid #22344f;
+  border-radius: 13px;
+  padding: 11px 13px;
+}
+.item-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.mini-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #16243b;
+  border: 1px solid #2e4569;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--cyan);
+  overflow: hidden;
+  flex: none;
+}
+.mini-logo img { width: 100%; height: 100%; object-fit: cover; }
+.item-title { font-size: 14px; font-weight: 800; color: #fff; overflow-wrap: anywhere; }
+.item-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.item-actions { display: flex; gap: 6px; flex: none; }
 
-.rulebox{border:1px solid #293c57;border-radius:14px;overflow:hidden;margin-top:12px;background:#080e1a}.rulebox summary{padding:14px;color:#b9d9ff;font-size:13px;font-weight:850;cursor:pointer;background:#15243a;user-select:none}.rulecontent{padding:14px}.rulegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.rulegrid .field{margin:0}.rulegrid input{min-height:42px;padding:8px}
+/* Leaderboard Table */
+.tablewrap { overflow-x: auto; border: 1px solid #283a56; border-radius: 14px; background: #09101c; }
+table { border-collapse: collapse; width: 100%; font-size: 12px; }
+th {
+  background: #142136;
+  color: #9cb2cf;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 12px 6px;
+  text-align: center;
+  white-space: nowrap;
+  font-weight: 800;
+  border-bottom: 2px solid #243550;
+}
+td {
+  padding: 10px 6px;
+  border-bottom: 1px solid #172336;
+  text-align: center;
+  white-space: nowrap;
+  font-weight: 700;
+  color: #dce6f7;
+}
+td:nth-child(2), th:nth-child(2) { text-align: left; padding-left: 10px; }
+tbody tr:nth-child(1) { background: rgba(255, 204, 77, 0.1); }
+tbody tr:nth-child(2) { background: rgba(212, 224, 240, 0.05); }
+tbody tr:nth-child(3) { background: rgba(240, 152, 91, 0.05); }
+.rank-badge {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  font-weight: 900;
+  font-size: 12px;
+  background: #162338;
+  color: var(--muted);
+}
+.rank-1 { background: linear-gradient(135deg, #ffd466, #f58a25); color: #111; }
+.rank-2 { background: linear-gradient(135deg, #e2ebf5, #99adc4); color: #111; }
+.rank-3 { background: linear-gradient(135deg, #f5a673, #c46d3b); color: #111; }
+.teamcell-wrap { display: flex; align-items: center; gap: 8px; }
+.tbl-logo { width: 26px; height: 26px; border-radius: 50%; background: #182740; border: 1px solid #2f466b; overflow: hidden; display: grid; place-items: center; font-size: 11px; flex: none; }
+.tbl-logo img { width: 100%; height: 100%; object-fit: cover; }
+.teamcell-name { font-weight: 800; max-width: 135px; overflow: hidden; text-overflow: ellipsis; color: #ffffff; }
+.booyah-cell { color: var(--gold); font-weight: 800; }
+.score { color: var(--green); font-weight: 900; font-size: 14px; }
 
-.history{display:flex;flex-direction:column;gap:8px;margin-top:14px}
-.history-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;border:1px solid #263750;border-radius:12px;background:#0c1625;position:relative;overflow:hidden}
-.history-item::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--blue)}
-.history-main{min-width:0}.history-team{font-size:13px;font-weight:900;overflow-wrap:anywhere;color:#fff}.history-meta{font-size:11px;color:var(--muted);margin-top:4px;font-weight:600}.history-points{font-size:14px;font-weight:950;color:var(--green);white-space:nowrap;background:rgba(80, 223, 161, 0.12);padding:4px 8px;border-radius:8px}
-.empty{color:var(--muted);text-align:center;padding:28px 10px;font-size:13px;border:1px dashed #2b3b54;border-radius:14px;font-weight:600}
+.bxh-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+.bxh-actions .full-btn { grid-column: 1 / -1; }
+.empty { color: var(--muted); text-align: center; padding: 22px 12px; font-size: 13px; border: 1px dashed #293b56; border-radius: 14px; font-weight: 600; }
+.tip { font-size: 11px; color: var(--muted); line-height: 1.5; margin: 10px 2px 0; }
+.rulebox { border: 1px solid #293c57; border-radius: 14px; overflow: hidden; margin-top: 14px; background: #080e1a; }
+.rulebox summary { padding: 13px 14px; color: #b9d9ff; font-size: 13px; font-weight: 800; cursor: pointer; background: #142238; user-select: none; }
+.rulecontent { padding: 14px; }
+.rulegrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.rulegrid .field { margin: 0; }
+.rulegrid input { min-height: 38px; padding: 6px; text-align: center; font-weight: 800; }
 
-/* Table - Tối ưu hiển thị đủ 6 cột trên mọi màn hình & khi xuất ảnh */
-.tablewrap{overflow-x:auto;border:1px solid #293b55;border-radius:14px;background:#0b121d}
-table{border-collapse:collapse;width:100%;font-size:12px}
-th{background:#152236;color:#9eb2cd;font-size:10px;letter-spacing:0.6px;text-transform:uppercase;padding:13px 6px;text-align:center;white-space:nowrap;font-weight:900;border-bottom:2px solid #24344c}
-td{padding:13px 6px;border-bottom:1px solid #1a273b;text-align:center;white-space:nowrap;font-weight:700;color:#dce6f7}
-td:nth-child(2),th:nth-child(2){text-align:left;padding-left:10px}
-tbody tr:first-child{background:rgba(255, 203, 98, 0.08)}
-.rank{font-size:15px}.score{color:var(--green);font-weight:950;font-size:14px}.teamcell{font-weight:900;max-width:130px;overflow:hidden;text-overflow:ellipsis;color:#ffffff}
+/* Chế độ Xuất Ảnh HD */
+.exporting-mode { width: 720px !important; max-width: 720px !important; padding: 28px !important; background: #050811 !important; margin: 0 auto !important; }
+.exporting-mode * { animation: none !important; transition: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+.exporting-mode .tablewrap { overflow: visible !important; }
+.exporting-mode table { width: 100% !important; font-size: 13px !important; }
+.exporting-mode th, .exporting-mode td { padding: 12px 10px !important; }
+.exporting-mode .teamcell-name { max-width: 240px !important; }
+.exporting-mode .top-actions, .exporting-mode .tabs, .exporting-mode .bxh-actions, .exporting-mode .tip { display: none !important; }
 
-.bxh-actions{display:flex;gap:10px;margin-top:16px}.bxh-actions button{flex:1}
-.tip{font-size:11px;color:var(--muted);line-height:1.5;margin:12px 2px 0;font-style:italic}
-.footer{text-align:center;color:#4a6180;font-size:11px;padding:10px 0 20px;font-weight:600}
-
-/* Chế độ chuyên dụng khi chụp ảnh (Export Mode) - Fix sạch lỗi mờ, tối và mất cột */
-.exporting-mode{width:680px !important;max-width:680px !important;padding:28px !important;background:#060a13 !important;margin:0 auto !important}
-.exporting-mode *{animation:none !important;transition:none !important;opacity:1 !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
-.exporting-mode .tablewrap{overflow:visible !important}
-.exporting-mode table{width:100% !important;min-width:100% !important;font-size:14px !important}
-.exporting-mode th,.exporting-mode td{padding:14px 12px !important}
-.exporting-mode .teamcell{max-width:240px !important}
-.exporting-mode .top-actions,.exporting-mode .tabs,.exporting-mode .bxh-actions,.exporting-mode .tip{display:none !important}
-
-/* Modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(4, 8, 16, 0.85);backdrop-filter:blur(5px);display:none;place-items:center;z-index:999;padding:20px}
-.modal-box{background:linear-gradient(145deg,#131f33,#0d1522);border:1px solid #314968;border-radius:20px;padding:24px;width:100%;max-width:340px;box-shadow:0 16px 40px rgba(0,0,0,0.6);text-align:center}
-.modal-title{font-size:18px;font-weight:900;margin:0 0 10px;color:#fff}
-.modal-desc{font-size:13px;color:var(--muted);margin:0 0 24px;line-height:1.5}
-.modal-actions{display:flex;gap:10px}
-.modal-actions button{flex:1;padding:12px;font-size:14px;font-weight:800;border-radius:12px;border:none}
-.modal-btn-cancel{background:#22334c;color:#fff}
-.modal-btn-confirm{background:var(--red);color:#fff}
+/* Modal Đa Năng */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 8, 16, 0.86);
+  backdrop-filter: blur(5px);
+  display: none;
+  place-items: center;
+  z-index: 999;
+  padding: 18px;
+}
+.modal-box {
+  background: linear-gradient(155deg, #152238, #0c1424);
+  border: 1px solid #334e73;
+  border-radius: 20px;
+  padding: 22px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.65);
+  text-align: center;
+}
+.modal-title { font-size: 17px; font-weight: 900; margin: 0 0 8px; color: #fff; }
+.modal-desc { font-size: 12px; color: var(--muted); margin: 0 0 16px; line-height: 1.5; }
+.modal-input {
+  width: 100%;
+  min-height: 44px;
+  background: #080d18;
+  border: 1px solid #2f4669;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  display: none;
+}
+.modal-actions { display: flex; gap: 10px; margin-top: 6px; }
+.modal-actions button { flex: 1; padding: 12px; font-size: 13px; font-weight: 800; border-radius: 12px; border: none; }
+.modal-btn-cancel { background: #21324c; color: #fff; }
+.modal-btn-confirm { background: var(--blue); color: #051020; }
+.modal-btn-confirm.danger-btn { background: var(--red); color: #fff; }
 
 /* Toast */
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#ffffff;color:#102033;padding:12px 20px;border-radius:30px;font-size:13px;font-weight:900;box-shadow:0 10px 30px rgba(0,0,0,0.5);transition:all 0.25s ease;z-index:1000;max-width:90%;text-align:center}
-.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  pointer-events: none;
+  background: #ffffff;
+  color: #0b1628;
+  padding: 11px 20px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  transition: all 0.25s ease;
+  z-index: 1000;
+  max-width: 90%;
+  text-align: center;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.footer { text-align: center; color: #4e6585; font-size: 11px; padding: 10px 0 20px; font-weight: 700; }
+
+@media (max-width: 420px) {
+  .rulegrid { grid-template-columns: repeat(2, 1fr); }
+  .batch-row { grid-template-columns: 1.1fr 1fr 1.1fr; gap: 6px; padding: 8px; }
+}
 </style>
 </head>
 <body>
 <div class="app" id="appContainer">
-<header class="topbar">
- <div class="brand"><div class="brandmark">N</div><div><div class="brandname"><span>NTT</span> ESPORTS</div><div class="tagline">Custom Tournament Manager</div></div></div>
- <div class="top-actions">
-  <button class="iconbtn" title="Xuất ảnh bảng xếp hạng" onclick="exportImage()">▧</button>
-  <button class="iconbtn" title="Làm mới giải" onclick="promptReset()">↻</button>
- </div>
-</header>
-
-<div class="glb-header">
- <div class="glb-title">Global Leaderboard</div>
- <div class="glb-sub">NTT ESPORTS • FREE FIRE CUSTOM</div>
-</div>
-
-<div class="podium" id="podiumArea"></div>
-
-<nav class="tabs">
- <button class="tab active" data-tab="rankPanel" onclick="showTab('rankPanel',this)">🏆 Xếp hạng</button>
- <button class="tab" data-tab="entryPanel" onclick="showTab('entryPanel',this)">＋ Nhập điểm</button>
- <button class="tab" data-tab="teamPanel" onclick="showTab('teamPanel',this)">♟ Quản lý</button>
-</nav>
-
-<main>
-<section class="panel active" id="rankPanel">
- <div class="panelhead"><div><h2 class="paneltitle">Bảng Xếp Hạng Chi Tiết</h2><div class="panelsub">Thứ hạng được tính theo tổng điểm</div></div><span class="count" id="rankCount">0 ĐỘI</span></div>
- <div class="tablewrap">
-  <table>
-   <thead><tr><th>Hạng</th><th>Tên đội</th><th>Trận</th><th>Kill</th><th>Điểm Top</th><th>Tổng</th></tr></thead>
-   <tbody id="rankBody"><tr><td colspan="6" class="empty">Chưa có dữ liệu thi đấu</td></tr></tbody>
-  </table>
- </div>
- <div class="bxh-actions"><button class="goldbtn btn" onclick="exportImage()">▧ Xuất Ảnh BXH Chuẩn HD</button><button class="secondary btn" onclick="exportCSV()">⇩ Tải Excel/CSV</button></div>
- <p class="tip">Mẹo: Nhấn "Xuất Ảnh BXH Chuẩn HD" để tải ngay ảnh bảng xếp hạng sắc nét, đầy đủ tất cả các cột điểm.</p>
-</section>
-
-<section class="panel" id="entryPanel">
- <div class="panelhead"><div><h2 class="paneltitle">Nhập Kết Quả Trận</h2><div class="panelsub">Cập nhật điểm cho từng đội sau mỗi ván</div></div><span class="count">TỰ TÍNH ĐIỂM</span></div>
- <div class="field"><label>CHỌN ĐỘI THI ĐẤU</label><select id="entryTeam"><option value="">Chưa có đội — hãy thêm đội trước</option></select></div>
- <div class="row2">
-  <div class="field"><label>THỨ HẠNG (TOP)</label><select id="placement"><option value="">-- Chọn Top --</option><option value="1">Top 1 (Booyah!)</option><option value="2">Top 2</option><option value="3">Top 3</option><option value="4">Top 4</option><option value="5">Top 5</option><option value="6">Top 6</option><option value="7">Top 7</option><option value="8">Top 8</option><option value="9">Top 9</option><option value="10">Top 10</option><option value="11">Top 11</option><option value="12">Top 12</option></select></div>
-  <div class="field"><label>SỐ KILL ĐẠT ĐƯỢC</label>
-    <div class="stepper">
-        <button type="button" onclick="adjKill(-1)">-</button>
-        <input id="kills" type="number" min="0" step="1" inputmode="numeric" value="0">
-        <button type="button" onclick="adjKill(1)">+</button>
-    </div>
-  </div>
- </div>
- <button class="primary wide btn" onclick="addResult()">LƯU KẾT QUẢ VÁN ĐẤU</button>
- <div class="panelhead" style="margin:24px 0 14px"><div><h3 class="paneltitle" style="font-size:14px">Lịch Sử Nhập Điểm</h3><div class="panelsub">Xem và xóa nếu nhập sai</div></div><span class="count" id="historyCount">0 LƯỢT</span></div>
- <div class="history" id="history"><div class="empty">Chưa có dữ liệu nào được lưu.</div></div>
-</section>
-
-<section class="panel" id="teamPanel">
- <div class="panelhead"><div><h2 class="paneltitle">Danh Sách Các Đội</h2><div class="panelsub">Thêm các đội tham gia giải đấu</div></div><span class="count" id="teamCount">0 ĐỘI</span></div>
- <div class="addline"><input id="teamName" aria-label="Tên đội" placeholder="Nhập tên đội..." maxlength="28"><button class="primary btn" onclick="addTeam()">THÊM ĐỘI</button></div>
- <div class="team-list" id="teamList"><div class="empty">Bạn chưa thêm đội nào.</div></div>
- <details class="rulebox" open>
-  <summary>⚙ TÙY CHỈNH LUẬT TÍNH ĐIỂM</summary>
-  <div class="rulecontent">
-   <div class="field"><label>ĐIỂM CHO 1 KILL</label><input id="killPoint" type="number" min="0" max="100" value="1" inputmode="numeric"></div>
-   <div class="rulegrid" id="ruleGrid"></div>
-   <p class="tip">Tổng điểm = (Kill × Hệ số Kill) + Điểm Top tương ứng. Thay đổi luật sẽ tự động tính lại toàn bộ BXH.</p>
-   <button class="secondary btn wide" style="margin-top:14px" onclick="restoreRules()">Khôi phục luật mặc định</button>
-  </div>
- </details>
- <button class="danger btn wide" style="margin-top:16px" onclick="promptReset()">XÓA TOÀN BỘ DỮ LIỆU GIẢI</button>
-</section>
-</main>
-<div class="footer">NTT ESPORTS • GLOBAL LEADERBOARD MANAGER</div>
-</div>
-
-<!-- Modal xác nhận -->
-<div class="modal-overlay" id="customModal">
-    <div class="modal-box">
-        <h3 class="modal-title" id="modalTitle">Xác nhận</h3>
-        <p class="modal-desc" id="modalDesc">Bạn có chắc chắn muốn thực hiện hành động này?</p>
-        <div class="modal-actions">
-            <button class="modal-btn-cancel" onclick="closeModal()">Hủy bỏ</button>
-            <button class="modal-btn-confirm" id="modalConfirmBtn">Đồng ý</button>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brandmark">N</div>
+      <div>
+        <div class="brandname"><span>NTT</span> ESPORTS</div>
+        <div class="tagline">
+          <span class="sync-dot online" id="syncDot"></span>
+          <span id="syncStatusText">Đang kết nối Cloud...</span>
         </div>
+      </div>
     </div>
+    <div class="top-actions">
+      <button class="iconbtn" title="Tải dữ liệu mới nhất từ Cloud" onclick="syncFromCloud(true)">↻ Đồng bộ</button>
+      <button class="iconbtn" id="adminToggleBtn" onclick="handleAdminBtn()">🔒 Admin</button>
+    </div>
+  </header>
+
+  <div class="glb-header">
+    <h1 class="glb-title" id="tourneyTitleText">GLOBAL LEADERBOARD</h1>
+    <div class="glb-sub" id="tourneySubText">NTT ESPORTS • FREE FIRE TOURNAMENT</div>
+  </div>
+
+  <!-- Bục Vinh Danh Top 3 (Có Logo) -->
+  <div class="podium" id="podiumArea"></div>
+
+  <!-- Thanh điều hướng tự động mở rộng khi đăng nhập Admin -->
+  <nav class="tabs" id="navTabs">
+    <button class="tab active" data-tab="rankPanel" onclick="showTab('rankPanel',this)">🏆 BXH</button>
+    <button class="tab" data-tab="registerPanel" onclick="showTab('registerPanel',this)">📝 Đăng ký Đội</button>
+    <button class="tab" data-tab="playerSubmitPanel" onclick="showTab('playerSubmitPanel',this)">📤 Báo điểm</button>
+    <button class="tab admin-only" data-tab="approvePanel" onclick="showTab('approvePanel',this)" style="display:none">
+      🔔 Duyệt <span class="badge-dot" id="pendingBadge" style="display:none">0</span>
+    </button>
+    <button class="tab admin-only" data-tab="adminEntryPanel" onclick="showTab('adminEntryPanel',this)" style="display:none">⚡ Nhập điểm</button>
+    <button class="tab admin-only" data-tab="managePanel" onclick="showTab('managePanel',this)" style="display:none">⚙ Quản lý</button>
+  </nav>
+
+  <main>
+    <!-- 1. PANEL BẢNG XẾP HẠNG (Công khai) -->
+    <section class="panel active" id="rankPanel">
+      <div class="panelhead">
+        <div>
+          <h2 class="paneltitle">Bảng Xếp Hạng Chính Thức</h2>
+          <div class="panelsub">Ưu tiên xét: Tổng điểm → Số Booyah → Số Kill → Điểm Top</div>
+        </div>
+        <span class="count" id="rankCount">0 ĐỘI</span>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Hạng</th>
+              <th>Đội thi đấu</th>
+              <th>Trận</th>
+              <th>🔥 Booyah</th>
+              <th>Kill</th>
+              <th>Điểm Top</th>
+              <th>Tổng</th>
+            </tr>
+          </thead>
+          <tbody id="rankBody">
+            <tr><td colspan="7" class="empty">Chưa có dữ liệu thi đấu</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="bxh-actions">
+        <button class="goldbtn btn full-btn" onclick="exportImage()">📸 Tải Ảnh BXH Chuẩn HD (Kèm Logo)</button>
+        <button class="secondary btn" onclick="copyTextStandings()">📋 Copy BXH (Zalo/Mess)</button>
+        <button class="secondary btn" onclick="exportCSV()">⇩ Tải File Excel/CSV</button>
+      </div>
+      <p class="tip">Mẹo: Người chơi có thể tự đăng ký đội kèm Logo ở tab "📝 Đăng ký Đội" và gửi điểm sau mỗi trận ở tab "📤 Báo điểm".</p>
+    </section>
+
+    <!-- 2. PANEL NGƯỜI CHƠI TỰ ĐĂNG KÝ ĐỘI + TẢI LOGO -->
+    <section class="panel" id="registerPanel">
+      <div class="panelhead">
+        <div>
+          <h2 class="paneltitle">Đăng Ký Đội Tham Gia</h2>
+          <div class="panelsub">Điền thông tin và chọn ảnh Logo để gửi cho Admin duyệt</div>
+        </div>
+        <span class="count">ĐĂNG KÝ ONLINE</span>
+      </div>
+
+      <div class="field">
+        <label>TÊN ĐỘI THI ĐẤU *</label>
+        <input id="regTeamName" placeholder="VD: NTT Gaming, Team Flash..." maxlength="28">
+      </div>
+      <div class="field">
+        <label>TÊN ĐỘI TRƯỞNG / SĐT ZALO *</label>
+        <input id="regCaptain" placeholder="Nhập SĐT Zalo hoặc tên liên hệ..." maxlength="40">
+      </div>
+      <div class="field">
+        <label>TẢI ẢNH LOGO ĐỘI (TỰ CẮT VUÔNG & NÉN NHẸ)</label>
+        <div class="logo-upload-wrap">
+          <div class="logo-preview" id="regLogoPreview">🛡️</div>
+          <div class="logo-upload-info">
+            <label class="logo-upload-btn" for="regLogoInput">📁 Chọn ảnh Logo từ máy</label>
+            <input type="file" id="regLogoInput" accept="image/*" style="display:none" onchange="handleLogoUpload(event, 'reg')">
+            <div class="tip" style="margin-top:6px">Tự động chuẩn hóa kích thước 96x96px siêu nhẹ.</div>
+          </div>
+        </div>
+      </div>
+      <button class="primary wide btn" id="btnSubmitReg" onclick="submitTeamRegistration()">🚀 GỬI ĐĂNG KÝ CHO ADMIN DUYỆT</button>
+
+      <div class="panelhead" style="margin-top:24px">
+        <div>
+          <h3 class="paneltitle" style="font-size:13px">Danh Sách Các Đội Đã Gửi</h3>
+          <div class="panelsub">Cập nhật trạng thái chờ duyệt & chính thức</div>
+        </div>
+      </div>
+      <div class="card-list" id="publicRegStatusList"></div>
+    </section>
+
+    <!-- 3. PANEL NGƯỜI CHƠI TỰ BÁO ĐIỂM SAU TRẬN -->
+    <section class="panel" id="playerSubmitPanel">
+      <div class="panelhead">
+        <div>
+          <h2 class="paneltitle">Báo Điểm Sau Ván Đấu</h2>
+          <div class="panelsub">Chọn đúng đội của bạn và nhập Top + Kill vừa đạt được</div>
+        </div>
+        <span class="count">CHỜ ADMIN DUYỆT</span>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>CHỌN ĐỘI CỦA BẠN *</label>
+          <select id="playerTeamSelect"><option value="">-- Chọn đội --</option></select>
+        </div>
+        <div class="field">
+          <label>VÁN ĐẤU THỨ *</label>
+          <select id="playerMatchSelect">
+            <option value="1">Ván 1</option>
+            <option value="2">Ván 2</option>
+            <option value="3">Ván 3</option>
+            <option value="4">Ván 4</option>
+            <option value="5">Ván 5</option>
+            <option value="6">Ván 6</option>
+            <option value="7">Ván 7</option>
+            <option value="8">Ván 8</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>THỨ HẠNG (TOP) *</label>
+          <select id="playerPlacement">
+            <option value="">-- Chọn Top --</option>
+            <option value="1">Top 1 (Booyah!)</option>
+            <option value="2">Top 2</option>
+            <option value="3">Top 3</option>
+            <option value="4">Top 4</option>
+            <option value="5">Top 5</option>
+            <option value="6">Top 6</option>
+            <option value="7">Top 7</option>
+            <option value="8">Top 8</option>
+            <option value="9">Top 9</option>
+            <option value="10">Top 10</option>
+            <option value="11">Top 11</option>
+            <option value="12">Top 12</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>SỐ KILL ĐẠT ĐƯỢC *</label>
+          <div class="stepper">
+            <button type="button" onclick="stepInput('playerKills', -1)">−</button>
+            <input id="playerKills" type="number" min="0" value="0" inputmode="numeric">
+            <button type="button" onclick="stepInput('playerKills', 1)">+</button>
+          </div>
+          <div class="quick-chips">
+            <button type="button" class="chip" onclick="$('playerKills').value=0">0</button>
+            <button type="button" class="chip" onclick="stepInput('playerKills', 2)">+2</button>
+            <button type="button" class="chip" onclick="stepInput('playerKills', 5)">+5</button>
+            <button type="button" class="chip" onclick="stepInput('playerKills', 10)">+10</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>GHI CHÚ NGƯỜI GỬI (KHÔNG BẮT BUỘC)</label>
+        <input id="playerNote" placeholder="VD: Đội trưởng báo điểm ván 1..." maxlength="50">
+      </div>
+
+      <button class="successbtn wide btn" id="btnSubmitScore" onclick="submitPlayerResult()">📤 GỬI KẾT QUẢ CHO ADMIN DUYỆT</button>
+
+      <div class="panelhead" style="margin-top:24px">
+        <div>
+          <h3 class="paneltitle" style="font-size:13px">Các Lượt Báo Điểm Đang Chờ Duyệt</h3>
+          <div class="panelsub">Sẽ tự động cộng vào BXH ngay khi Admin bấm duyệt</div>
+        </div>
+      </div>
+      <div class="card-list" id="publicPendingScoreList"></div>
+    </section>
+
+    <!-- 4. PANEL ADMIN: DUYỆT ĐỘI & DUYỆT ĐIỂM -->
+    <section class="panel" id="approvePanel">
+      <div class="panelhead">
+        <div>
+          <h2 class="paneltitle">Duyệt Đăng Ký Đội & Logo</h2>
+          <div class="panelsub">Kiểm tra tên đội và ảnh Logo người chơi gửi lên</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <button class="secondary btn sm-btn" onclick="approveAllTeams()">✓ Duyệt tất cả</button>
+          <span class="count" id="pendingTeamsCount">0 ĐƠN</span>
+        </div>
+      </div>
+      <div class="card-list" id="pendingTeamsList"></div>
+
+      <div class="panelhead" style="margin-top:26px">
+        <div>
+          <h2 class="paneltitle">Duyệt Điểm Người Chơi Báo</h2>
+          <div class="panelsub">Kiểm tra Thứ hạng Top & Kill trước khi cộng vào BXH</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <button class="secondary btn sm-btn" onclick="approveAllScores()">✓ Cộng tất cả</button>
+          <span class="count" id="pendingScoresCount">0 LƯỢT</span>
+        </div>
+      </div>
+      <div class="card-list" id="pendingScoresList"></div>
+    </section>
+
+    <!-- 5. PANEL ADMIN: NHẬP ĐIỂM TRỰC TIẾP & NHẬP CẢ VÁN -->
+    <section class="panel" id="adminEntryPanel">
+      <div class="panelhead">
+        <div>
+          <h2 class="paneltitle">Admin Nhập Điểm Trực Tiếp</h2>
+          <div class="panelsub">Cập nhật thẳng lên Bảng xếp hạng không cần chờ duyệt</div>
+        </div>
+        <span class="count" id="adminMatchBadge">VÁN 1</span>
+      </div>
+
+      <div class="mode-switch">
+        <button class="mode-btn active" id="btnModeSingle" onclick="switchAdminEntryMode('single')">Nhập Lẻ Từng Đội</button>
+        <button class="mode-btn" id="btnModeBatch" onclick="switchAdminEntryMode('batch')">⚡ Nhập Cả Ván (Tất cả đội)</button>
+      </div>
+
+      <div class="field">
+        <label>CHỌN VÁN ĐẤU</label>
+        <select id="adminMatchSelect" onchange="onAdminMatchChange()">
+          <option value="1">Ván 1</option>
+          <option value="2">Ván 2</option>
+          <option value="3">Ván 3</option>
+          <option value="4">Ván 4</option>
+          <option value="5">Ván 5</option>
+          <option value="6">Ván 6</option>
+          <option value="7">Ván 7</option>
+          <option value="8">Ván 8</option>
+        </select>
+      </div>
+
+      <!-- Chế độ nhập lẻ -->
+      <div id="adminSingleBox">
+        <div class="field">
+          <label>CHỌN ĐỘI</label>
+          <select id="adminTeamSelect"><option value="">-- Chọn đội --</option></select>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>THỨ HẠNG (TOP)</label>
+            <select id="adminPlacement">
+              <option value="">-- Chọn Top --</option>
+              <option value="1">Top 1 (Booyah!)</option>
+              <option value="2">Top 2</option>
+              <option value="3">Top 3</option>
+              <option value="4">Top 4</option>
+              <option value="5">Top 5</option>
+              <option value="6">Top 6</option>
+              <option value="7">Top 7</option>
+              <option value="8">Top 8</option>
+              <option value="9">Top 9</option>
+              <option value="10">Top 10</option>
+              <option value="11">Top 11</option>
+              <option value="12">Top 12</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>SỐ KILL</label>
+            <div class="stepper">
+              <button type="button" onclick="stepInput('adminKills', -1)">−</button>
+              <input id="adminKills" type="number" min="0" value="0" inputmode="numeric">
+              <button type="button" onclick="stepInput('adminKills', 1)">+</button>
+            </div>
+            <div class="quick-chips">
+              <button type="button" class="chip" onclick="$('adminKills').value=0">0</button>
+              <button type="button" class="chip" onclick="stepInput('adminKills', 2)">+2</button>
+              <button type="button" class="chip" onclick="stepInput('adminKills', 5)">+5</button>
+            </div>
+          </div>
+        </div>
+        <button class="primary wide btn" onclick="adminAddDirectResult()">✓ LƯU ĐIỂM NGAY</button>
+      </div>
+
+      <!-- Chế độ nhập cả ván -->
+      <div id="adminBatchBox" style="display:none">
+        <div class="batch-list" id="batchList"></div>
+        <button class="goldbtn wide btn" onclick="saveAdminBatchResults()">⚡ LƯU TOÀN BỘ VÁN ĐẤU</button>
+      </div>
+
+      <div class="panelhead" style="margin-top:24px">
+        <div>
+          <h3 class="paneltitle" style="font-size:14px">Lịch Sử Điểm Chính Thức</h3>
+          <div class="panelsub">Xem hoặc xóa nếu nhập nhầm</div>
+        </div>
+        <span class="count" id="officialHistoryCount">0 LƯỢT</span>
+      </div>
+      <div class="card-list" id="officialHistoryList"></div>
+    </section>
+
+    <!-- 6. PANEL ADMIN: QUẢN LÝ ĐỘI, LUẬT & CLOUD NPOINT -->
+    <section class="panel" id="managePanel">
+      <div class="panelhead">
+        <div>
+          <h2 class="paneltitle">☁️ Máy Chủ Lưu Trữ Npoint.io</h2>
+          <div class="panelsub">Đã tích hợp sẵn API của bạn để tự động lưu trữ miễn phí</div>
+        </div>
+        <span class="count">ONLINE</span>
+      </div>
+      <div class="field">
+        <label>ĐƯỜNG DẪN API NPOINT.IO (HOẶC FIREBASE)</label>
+        <input id="cloudUrlInput" value="https://api.npoint.io/d547bec51dde4aad9027">
+      </div>
+      <div class="row2">
+        <button class="primary btn" onclick="saveCloudConfig()">💾 Lưu & Đồng Bộ</button>
+        <button class="secondary btn" onclick="pushToCloud(true)">☁️ Đẩy Dữ Liệu Lên</button>
+      </div>
+
+      <details class="rulebox" style="margin-top:16px" open>
+        <summary>➕ ADMIN THÊM ĐỘI TRỰC TIẾP (KHÔNG CẦN DUYỆT)</summary>
+        <div class="rulecontent">
+          <div class="row2">
+            <div class="field">
+              <label>TÊN ĐỘI *</label>
+              <input id="admNewTeamName" placeholder="Nhập tên đội..." maxlength="28">
+            </div>
+            <div class="field">
+              <label>LIÊN HỆ / GHI CHÚ</label>
+              <input id="admNewTeamCap" placeholder="SĐT / Đội trưởng..." maxlength="35">
+            </div>
+          </div>
+          <div class="field">
+            <label>LOGO ĐỘI (TÙY CHỌN)</label>
+            <div class="logo-upload-wrap">
+              <div class="logo-preview" id="admLogoPreview">🛡️</div>
+              <div class="logo-upload-info">
+                <label class="logo-upload-btn" for="admLogoInput">📁 Chọn ảnh Logo</label>
+                <input type="file" id="admLogoInput" accept="image/*" style="display:none" onchange="handleLogoUpload(event, 'adm')">
+              </div>
+            </div>
+          </div>
+          <button class="successbtn wide btn" onclick="adminAddTeamDirect()">+ THÊM ĐỘI VÀO BXH</button>
+        </div>
+      </details>
+
+      <details class="rulebox">
+        <summary>🔑 CÀI ĐẶT TÊN GIẢI ĐẤU & MẬT KHẨU ADMIN</summary>
+        <div class="rulecontent">
+          <div class="field">
+            <label>TIÊU ĐỀ GIẢI ĐẤU</label>
+            <input id="cfgTitle" placeholder="GLOBAL LEADERBOARD">
+          </div>
+          <div class="field">
+            <label>PHỤ ĐỀ GIẢI ĐẤU</label>
+            <input id="cfgSub" placeholder="NTT ESPORTS • FREE FIRE TOURNAMENT">
+          </div>
+          <div class="field">
+            <label>ĐỔI MẬT KHẨU ADMIN</label>
+            <input id="cfgAdminPass" type="password" placeholder="Nhập mật khẩu mới nếu muốn đổi...">
+          </div>
+          <button class="secondary btn wide" onclick="saveAdminSettings()">Lưu cài đặt giải đấu</button>
+        </div>
+      </details>
+
+      <details class="rulebox">
+        <summary>⚙ TÙY CHỈNH BẢNG ĐIỂM TOP & KILL</summary>
+        <div class="rulecontent">
+          <div class="field">
+            <label>ĐIỂM CHO 1 KILL</label>
+            <input id="killPoint" type="number" min="0" value="1">
+          </div>
+          <div class="rulegrid" id="ruleGrid"></div>
+          <button class="secondary btn wide" style="margin-top:12px" onclick="restoreDefaultRules()">Khôi phục luật mặc định (Chuẩn FF)</button>
+        </div>
+      </details>
+
+      <div class="panelhead" style="margin-top:22px">
+        <div>
+          <h3 class="paneltitle" style="font-size:14px">Danh Sách Đội Đã Duyệt (<span id="admApprovedCount">0</span>)</h3>
+          <div class="panelsub">Sửa tên đội hoặc xóa đội khỏi giải</div>
+        </div>
+      </div>
+      <div class="card-list" id="approvedTeamsAdminList"></div>
+
+      <div class="row2" style="margin-top:16px">
+        <button class="secondary btn" onclick="backupJSON()">⬇ Tải File Sao Lưu JSON</button>
+        <button class="secondary btn" onclick="$('jsonRestoreInput').click()">⬆ Khôi Phục Từ JSON</button>
+        <input type="file" id="jsonRestoreInput" accept=".json" style="display:none" onchange="restoreJSON(event)">
+      </div>
+
+      <button class="danger btn wide" style="margin-top:12px" onclick="promptResetTournament()">🗑 XÓA SẠCH DỮ LIỆU GIẢI ĐẤU</button>
+    </section>
+  </main>
+
+  <div class="footer">NTT ESPORTS • POWERED BY NPOINT CLOUD</div>
+</div>
+
+<!-- Hộp thoại Modal Đa Năng -->
+<div class="modal-overlay" id="customModal">
+  <div class="modal-box">
+    <h3 class="modal-title" id="modalTitle">Xác nhận</h3>
+    <p class="modal-desc" id="modalDesc"></p>
+    <input class="modal-input" id="modalInput1">
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="closeModal()">Hủy</button>
+      <button class="modal-btn-confirm" id="modalConfirmBtn">Đồng ý</button>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const $=id=>document.getElementById(id);
-const ruleDefaults={killPoint:1,p1:12,p2:9,p3:8,p4:7,p5:6,p6:5,p7:4,p8:3,p9:2,p10:1,p11:0,p12:0};
-let teams=[],results=[];
+// ĐÃ GẮN SẴN API NPOINT.IO CỦA BẠN:
+const DEFAULT_CLOUD_URL = "https://api.npoint.io/d547bec51dde4aad9027";
 
-let confirmAction = null;
-function showModal(title, desc, actionText, actionCallback) {
-    $('modalTitle').textContent = title;
-    $('modalDesc').textContent = desc;
-    $('modalConfirmBtn').textContent = actionText;
-    confirmAction = actionCallback;
-    $('customModal').style.display = 'grid';
+const $ = id => document.getElementById(id);
+const ruleDefaults = {
+  killPoint: 1,
+  p1: 12, p2: 9, p3: 8, p4: 7, p5: 6, p6: 5,
+  p7: 4, p8: 3, p9: 2, p10: 1, p11: 0, p12: 0
+};
+
+let state = {
+  meta: {
+    title: "GLOBAL LEADERBOARD",
+    sub: "NTT ESPORTS • FREE FIRE TOURNAMENT",
+    adminPass: "09123456789"
+  },
+  rules: { ...ruleDefaults },
+  teams: [],          // [{ name, captain, logo }]
+  pendingTeams: [],   // [{ id, name, captain, logo, time }]
+  results: [],        // [{ id, team, match, top, kill, time }]
+  pendingResults: []  // [{ id, team, match, top, kill, note, time }]
+};
+
+let isAdmin = false;
+let adminEntryMode = "single";
+let tempRegLogo = "";
+let tempAdmLogo = "";
+let cloudUrl = localStorage.getItem("ntt_cloud_url") || DEFAULT_CLOUD_URL;
+let modalCallback = null;
+let isSyncing = false;
+
+/* --- TIỆN ÍCH GIAO DIỆN & MODAL --- */
+function notify(msg) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
 }
+
+function esc(s) {
+  return String(s || "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
+function openModal({ title, desc, confirmText = "Đồng ý", isDanger = false, inputConfig = null, onConfirm }) {
+  $("modalTitle").textContent = title;
+  $("modalDesc").textContent = desc;
+  const btn = $("modalConfirmBtn");
+  btn.textContent = confirmText;
+  btn.className = "modal-btn-confirm" + (isDanger ? " danger-btn" : "");
+
+  const inp = $("modalInput1");
+  if (inputConfig) {
+    inp.style.display = "block";
+    inp.type = inputConfig.type || "text";
+    inp.value = inputConfig.value || "";
+    inp.placeholder = inputConfig.placeholder || "";
+  } else {
+    inp.style.display = "none";
+  }
+
+  modalCallback = () => onConfirm(inp.value.trim());
+  $("customModal").style.display = "grid";
+  if (inputConfig) setTimeout(() => inp.focus(), 50);
+}
+
 function closeModal() {
-    $('customModal').style.display = 'none';
-    confirmAction = null;
+  $("customModal").style.display = "none";
+  modalCallback = null;
 }
-$('modalConfirmBtn').addEventListener('click', () => {
-    if(confirmAction) confirmAction();
-    closeModal();
+
+$("modalConfirmBtn").addEventListener("click", () => {
+  if (modalCallback) modalCallback();
+  closeModal();
 });
 
-function notify(msg){let t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window._toastTimer);window._toastTimer=setTimeout(()=>t.classList.remove('show'),2500)}
+$("modalInput1").addEventListener("keydown", e => {
+  if (e.key === "Enter" && modalCallback) {
+    modalCallback();
+    closeModal();
+  }
+});
 
-function showTab(id,btn){document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b===btn));}
-
-function save(){localStorage.setItem('ntt_teams',JSON.stringify(teams));localStorage.setItem('ntt_results',JSON.stringify(results));let r={};Object.keys(ruleDefaults).forEach(k=>r[k]=$(k).value);localStorage.setItem('ntt_rules',JSON.stringify(r))}
-
-function load(){try{teams=JSON.parse(localStorage.getItem('ntt_teams')||'[]');results=JSON.parse(localStorage.getItem('ntt_results')||'[]');let r=JSON.parse(localStorage.getItem('ntt_rules')||'{}');Object.keys(ruleDefaults).forEach(k=>$(k).value=r[k]??ruleDefaults[k])}catch(e){teams=[];results=[]}}
-
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-
-function adjKill(val) {
-    let inp = $('kills');
-    let current = parseInt(inp.value) || 0;
-    let next = current + val;
-    if(next >= 0) inp.value = next;
+function showTab(id, btn) {
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === id));
+  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", b === btn));
+  if (id === "adminEntryPanel" && adminEntryMode === "batch") renderAdminBatchRows();
 }
 
-function addTeam(){let n=$('teamName').value.trim();if(!n)return notify('Bạn chưa nhập tên đội!');if(teams.some(x=>x.toLowerCase()===n.toLowerCase()))return notify('Tên đội này đã tồn tại!');teams.push(n);$('teamName').value='';save();render();notify('Đã thêm đội: '+n)}
+function stepInput(id, delta) {
+  const inp = $(id);
+  inp.value = Math.max(0, (parseInt(inp.value, 10) || 0) + delta);
+}
 
-function promptDeleteTeam(i){
-    showModal("Xóa đội thi đấu", `Bạn có chắc muốn xóa đội "${teams[i]}" và toàn bộ điểm của đội này?`, "Xóa đội", () => {
-        let n=teams[i];teams.splice(i,1);results=results.filter(r=>r.team!==n);save();render();notify('Đã xóa đội');
+/* --- XỬ LÝ CẮT VUÔNG & NÉN NHẸ ẢNH LOGO (96x96px) --- */
+function handleLogoUpload(e, target) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const size = 96; // Chuẩn 96x96 siêu nhẹ cho npoint.io (~3KB)
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext("2d");
+
+      const minSide = Math.min(img.width, img.height);
+      const sx = (img.width - minSide) / 2;
+      const sy = (img.height - minSide) / 2;
+      ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
+
+      let base64 = canvas.toDataURL("image/webp", 0.75);
+      if (base64.length > 25000) {
+        base64 = canvas.toDataURL("image/jpeg", 0.72);
+      }
+
+      if (target === "reg") {
+        tempRegLogo = base64;
+        $("regLogoPreview").innerHTML = `<img src="${base64}" alt="Logo">`;
+      } else {
+        tempAdmLogo = base64;
+        $("admLogoPreview").innerHTML = `<img src="${base64}" alt="Logo">`;
+      }
+      notify("Đã căn chỉnh & nén nhẹ Logo thành công!");
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* --- ĐỒNG BỘ ĐÁM MÂY VỚI NPOINT.IO (VÀ FIREBASE) --- */
+function saveLocal() {
+  localStorage.setItem("ntt_state_v3", JSON.stringify(state));
+}
+
+function loadLocal() {
+  try {
+    const raw = localStorage.getItem("ntt_state_v3");
+    if (raw) mergeIncomingData(JSON.parse(raw));
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function mergeIncomingData(data) {
+  if (!data || typeof data !== "object") return false;
+  if (!Array.isArray(data.teams) && !Array.isArray(data.pendingTeams) && !Array.isArray(data.results)) {
+    return false; // Kho npoint mới tạo chưa có cấu trúc giải đấu
+  }
+  state = {
+    meta: { ...state.meta, ...(data.meta || {}) },
+    rules: { ...ruleDefaults, ...(data.rules || {}) },
+    teams: Array.isArray(data.teams) ? data.teams : [],
+    pendingTeams: Array.isArray(data.pendingTeams) ? data.pendingTeams : [],
+    results: Array.isArray(data.results) ? data.results : [],
+    pendingResults: Array.isArray(data.pendingResults) ? data.pendingResults : []
+  };
+  return true;
+}
+
+function getEndpointConfig(rawUrl) {
+  const clean = String(rawUrl || "").trim().replace(/\/+$/, "");
+  if (!clean) return null;
+  if (clean.includes("npoint.io")) {
+    return { url: clean, writeMethod: "POST" }; // npoint.io dùng POST để cập nhật JSON
+  }
+  const fbUrl = clean.endsWith(".json") ? clean : `${clean}/ntt_tournament.json`;
+  return { url: fbUrl, writeMethod: "PUT" };
+}
+
+function setSyncBadge(status, text) {
+  const dot = $("syncDot");
+  dot.className = "sync-dot " + status;
+  $("syncStatusText").textContent = text;
+}
+
+async function syncFromCloud(showToast = false) {
+  const cfg = getEndpointConfig(cloudUrl);
+  if (!cfg) {
+    setSyncBadge("", "Chế độ Offline");
+    return false;
+  }
+  if (isSyncing) return false;
+  isSyncing = true;
+  setSyncBadge("syncing", "Đang đồng bộ Cloud...");
+
+  try {
+    const res = await fetch(cfg.url, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+
+    const isValidStructure = mergeIncomingData(data);
+    if (!isValidStructure) {
+      // Nếu kho npoint.io đang trống hoặc chứa JSON mẫu, tự động khởi tạo cấu trúc giải đấu lên npoint
+      isSyncing = false;
+      await pushToCloud(false);
+    } else {
+      saveLocal();
+      applyRulesToInputs();
+      render();
+      setSyncBadge("online", "Npoint Cloud • Đã đồng bộ");
+      if (showToast) notify("☁️ Đã tải dữ liệu mới nhất từ Cloud!");
+    }
+    isSyncing = false;
+    return true;
+  } catch (err) {
+    isSyncing = false;
+    setSyncBadge("error", "Lỗi kết nối Cloud (Đang lưu máy)");
+    if (showToast) notify("⚠️ Không thể tải từ Cloud! Kiểm tra lại mạng hoặc link npoint.");
+    return false;
+  }
+}
+
+async function pushToCloud(showToast = false) {
+  saveLocal();
+  const cfg = getEndpointConfig(cloudUrl);
+  if (!cfg) {
+    setSyncBadge("", "Chế độ Offline");
+    return false;
+  }
+  setSyncBadge("syncing", "Đang lưu lên Cloud...");
+
+  try {
+    const res = await fetch(cfg.url, {
+      method: cfg.writeMethod,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(state)
     });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    setSyncBadge("online", "Npoint Cloud • Đã lưu trực tuyến");
+    if (showToast) notify("☁️ Đã lưu dữ liệu lên Npoint Cloud thành công!");
+    return true;
+  } catch (err) {
+    setSyncBadge("error", "Lỗi ghi Cloud (Kiểm tra khóa Lock)");
+    if (showToast) notify("⚠️ Không thể ghi lên npoint.io! Hãy đảm bảo bạn chưa bấm Lock trên npoint.");
+    return false;
+  }
 }
 
-function addResult(){let team=$('entryTeam').value,top=Number($('placement').value),kill=Number($('kills').value);if(!team)return notify('Vui lòng chọn một đội!');if(!top||top<1||top>12)return notify('Vui lòng chọn Top đạt được!');if($('kills').value===''||!Number.isInteger(kill)||kill<0)return notify('Số Kill không hợp lệ!');results.push({team,top,kill,stamp:Date.now()});$('placement').value='';$('kills').value='0';save();render();notify('Đã lưu kết quả thành công!');showTab('rankPanel',document.querySelector('[data-tab="rankPanel"]'))}
+function saveCloudConfig() {
+  cloudUrl = $("cloudUrlInput").value.trim() || DEFAULT_CLOUD_URL;
+  localStorage.setItem("ntt_cloud_url", cloudUrl);
+  syncFromCloud(true);
+}
 
-function promptDeleteResult(i){
-    showModal("Xóa lượt đấu", "Bạn muốn xóa lượt điểm này? Bảng xếp hạng sẽ tự động tính lại.", "Xóa kết quả", () => {
-        results.splice(i,1);save();render();notify('Đã xóa 1 lượt kết quả');
+/* --- ĐĂNG NHẬP & PHÂN QUYỀN ADMIN --- */
+function handleAdminBtn() {
+  if (isAdmin) {
+    isAdmin = false;
+    updateAdminUI();
+    showTab("rankPanel", document.querySelector('[data-tab="rankPanel"]'));
+    notify("Đã thoát quyền Admin");
+  } else {
+    openModal({
+      title: "Đăng Nhập Quản Trị Viên",
+      desc: "Nhập mật khẩu Admin để duyệt đội, duyệt logo và quản lý điểm (Mặc định: 123456):",
+      confirmText: "Đăng nhập",
+      inputConfig: { type: "password", placeholder: "Nhập mật khẩu Admin..." },
+      onConfirm: pass => {
+        if (pass === (state.meta.adminPass || "123456")) {
+          isAdmin = true;
+          updateAdminUI();
+          showTab("approvePanel", document.querySelector('[data-tab="approvePanel"]'));
+          notify("🔓 Đã mở khóa bảng điều khiển Admin!");
+        } else {
+          notify("❌ Mật khẩu Admin không chính xác!");
+        }
+      }
     });
+  }
 }
 
-function getRules(){let p={};for(let i=1;i<=12;i++)p[i]=Math.max(0,Number($('p'+i).value)||0);return {kill:Math.max(0,Number($('killPoint').value)||0),place:p}}
+function updateAdminUI() {
+  const btn = $("adminToggleBtn");
+  btn.textContent = isAdmin ? "🛡️ Thoát Admin" : "🔒 Admin";
+  btn.classList.toggle("admin-active", isAdmin);
+  document.querySelectorAll(".admin-only").forEach(el => {
+    el.style.display = isAdmin ? "inline-block" : "none";
+  });
+}
 
-function standings(){let r=getRules();return teams.map(team=>{let a=results.filter(x=>x.team===team),kills=a.reduce((s,x)=>s+x.kill,0),top=a.reduce((s,x)=>s+r.place[x.top],0);return {team,matches:a.length,kills,top,total:kills*r.kill+top}}).sort((a,b)=>b.total-a.total||b.kills-a.kills||b.top-a.top||a.team.localeCompare(b.team,'vi'))}
+/* --- NGƯỜI CHƠI: ĐĂNG KÝ ĐỘI & BÁO ĐIỂM --- */
+async function submitTeamRegistration() {
+  const name = $("regTeamName").value.trim();
+  const captain = $("regCaptain").value.trim();
+  if (!name) return notify("Vui lòng nhập tên đội thi đấu!");
+  if (!captain) return notify("Vui lòng nhập tên Đội trưởng hoặc SĐT Zalo!");
 
-function render(){
-let list=$('teamList');list.innerHTML=teams.length?teams.map((t,i)=>`<div class="team"><div class="team-name"><span class="team-no">#${String(i+1).padStart(2,'0')}</span>${esc(t)}</div><button class="xbtn" onclick="promptDeleteTeam(${i})" title="Xóa đội">✕</button></div>`).join(''):'<div class="empty">Chưa có đội nào tham gia.</div>';
-$('entryTeam').innerHTML=teams.length?'<option value="">-- Chọn đội vừa thi đấu --</option>'+teams.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join(''):'<option value="">Chưa có đội — hãy thêm đội trước</option>';
-$('teamCount').textContent=teams.length+' ĐỘI';$('rankCount').textContent=teams.length+' ĐỘI';$('historyCount').textContent=results.length+' LƯỢT';
+  const btn = $("btnSubmitReg");
+  btn.disabled = true;
+  btn.textContent = "ĐANG GỬI LÊN CLOUD...";
 
-let s=standings();
-let t1=s[0]||{team:'—',total:0}, t2=s[1]||{team:'—',total:0}, t3=s[2]||{team:'—',total:0};
+  // Tải bản mới nhất từ npoint trước khi thêm để không ghi đè người khác
+  await syncFromCloud(false);
 
-$('podiumArea').innerHTML=`
- <div class="podium-card">
-  <div class="podium-rank">Rank 2</div>
-  <div class="avatar">🥈</div>
-  <div class="team-title" title="${esc(t2.team)}">${esc(t2.team)}</div>
-  <div class="team-score">${t2.total} PTS</div>
- </div>
- <div class="podium-card rank1">
-  <div class="crown">👑</div>
-  <div class="podium-rank">Rank 1</div>
-  <div class="avatar">🥇</div>
-  <div class="team-title" title="${esc(t1.team)}">${esc(t1.team)}</div>
-  <div class="team-score">${t1.total} PTS</div>
- </div>
- <div class="podium-card">
-  <div class="podium-rank">Rank 3</div>
-  <div class="avatar">🥉</div>
-  <div class="team-title" title="${esc(t3.team)}">${esc(t3.team)}</div>
-  <div class="team-score">${t3.total} PTS</div>
- </div>
-`;
+  const dupApproved = state.teams.some(t => t.name.toLowerCase() === name.toLowerCase());
+  const dupPending = state.pendingTeams.some(t => t.name.toLowerCase() === name.toLowerCase());
+  if (dupApproved || dupPending) {
+    btn.disabled = false;
+    btn.textContent = "🚀 GỬI ĐĂNG KÝ CHO ADMIN DUYỆT";
+    return notify("Tên đội này đã tồn tại hoặc đang chờ duyệt!");
+  }
 
-$('rankBody').innerHTML=s.length?s.map((x,i)=>`<tr><td class="rank">${i===0?'🥇':i===1?'🥈':i===2?'🥉':String(i+1)}</td><td class="teamcell">${esc(x.team)}</td><td>${x.matches}</td><td>${x.kills}</td><td>${x.top}</td><td class="score">${x.total}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">Chưa có dữ liệu thi đấu.</td></tr>';
+  state.pendingTeams.push({
+    id: "reg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+    name,
+    captain,
+    logo: tempRegLogo || "",
+    time: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })
+  });
 
-let hist=$('history');hist.innerHTML=results.length?[...results].map((r,i)=>({r,i})).reverse().map(({r,i})=>{let pts=r.kill*getRules().kill+getRules().place[r.top];return `<div class="history-item"><div class="history-main"><div class="history-team">${esc(r.team)}</div><div class="history-meta">Top ${r.top} • ${r.kill} Kill</div></div><div style="display:flex;align-items:center;gap:10px"><span class="history-points">+${pts}đ</span><button class="xbtn" onclick="promptDeleteResult(${i})">✕</button></div></div>`}).join(''):'<div class="empty">Chưa có lượt điểm nào được lưu.</div>'}
+  $("regTeamName").value = "";
+  $("regCaptain").value = "";
+  $("regLogoInput").value = "";
+  tempRegLogo = "";
+  $("regLogoPreview").innerHTML = "🛡️";
 
-function buildRules(){let g=$('ruleGrid');g.innerHTML=Array.from({length:12},(_,i)=>i+1).map(i=>`<div class="field"><label>ĐIỂM TOP ${i}</label><input id="p${i}" type="number" min="0" value="${ruleDefaults['p'+i]}" inputmode="numeric"></div>`).join('')}
+  await pushToCloud(false);
+  render();
+  btn.disabled = false;
+  btn.textContent = "🚀 GỬI ĐĂNG KÝ CHO ADMIN DUYỆT";
+  notify("🎉 Đã gửi đăng ký đội! Vui lòng chờ Admin duyệt.");
+}
 
-function restoreRules(){
-    showModal("Khôi phục luật điểm", "Đưa hệ thống điểm về mặc định (Top 1=12đ, 1 Kill=1đ)?", "Khôi phục", () => {
-        Object.keys(ruleDefaults).forEach(k=>$(k).value=ruleDefaults[k]);save();render();notify('Đã khôi phục luật mặc định');
+async function submitPlayerResult() {
+  const team = $("playerTeamSelect").value;
+  const match = Number($("playerMatchSelect").value) || 1;
+  const top = Number($("playerPlacement").value);
+  const kill = Math.max(0, parseInt($("playerKills").value, 10) || 0);
+  const note = $("playerNote").value.trim();
+
+  if (!team) return notify("Vui lòng chọn đội của bạn!");
+  if (!top || top < 1 || top > 12) return notify("Vui lòng chọn Thứ hạng (Top) đạt được!");
+
+  const btn = $("btnSubmitScore");
+  btn.disabled = true;
+  btn.textContent = "ĐANG GỬI ĐIỂM...";
+
+  await syncFromCloud(false);
+
+  state.pendingResults.push({
+    id: "sub_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+    team,
+    match,
+    top,
+    kill,
+    note,
+    time: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })
+  });
+
+  $("playerPlacement").value = "";
+  $("playerKills").value = "0";
+  $("playerNote").value = "";
+
+  await pushToCloud(false);
+  render();
+  btn.disabled = false;
+  btn.textContent = "📤 GỬI KẾT QUẢ CHO ADMIN DUYỆT";
+  notify("📤 Đã gửi báo điểm! Chờ Admin kiểm tra và duyệt.");
+}
+
+/* --- ADMIN: DUYỆT ĐỘI & DUYỆT ĐIỂM --- */
+async function approveTeam(id) {
+  await syncFromCloud(false);
+  const idx = state.pendingTeams.findIndex(x => x.id === id);
+  if (idx === -1) return;
+  const item = state.pendingTeams[idx];
+  state.pendingTeams.splice(idx, 1);
+
+  if (!state.teams.some(t => t.name.toLowerCase() === item.name.toLowerCase())) {
+    state.teams.push({ name: item.name, captain: item.captain, logo: item.logo });
+  }
+  await pushToCloud(false);
+  render();
+  notify(`✓ Đã duyệt đội: ${item.name}`);
+}
+
+async function approveAllTeams() {
+  if (!state.pendingTeams.length) return notify("Không có đơn đăng ký nào đang chờ!");
+  await syncFromCloud(false);
+  let count = 0;
+  state.pendingTeams.forEach(item => {
+    if (!state.teams.some(t => t.name.toLowerCase() === item.name.toLowerCase())) {
+      state.teams.push({ name: item.name, captain: item.captain, logo: item.logo });
+      count++;
+    }
+  });
+  state.pendingTeams = [];
+  await pushToCloud(false);
+  render();
+  notify(`✓ Đã duyệt tất cả ${count} đội vào BXH!`);
+}
+
+async function rejectTeam(id) {
+  await syncFromCloud(false);
+  state.pendingTeams = state.pendingTeams.filter(x => x.id !== id);
+  await pushToCloud(false);
+  render();
+  notify("Đã từ chối đơn đăng ký đội");
+}
+
+async function approveScore(id) {
+  await syncFromCloud(false);
+  const idx = state.pendingResults.findIndex(x => x.id === id);
+  if (idx === -1) return;
+  const item = state.pendingResults[idx];
+  state.pendingResults.splice(idx, 1);
+
+  const existIdx = state.results.findIndex(r => r.team === item.team && Number(r.match) === Number(item.match));
+  if (existIdx !== -1) state.results[existIdx] = { ...item };
+  else state.results.push({ ...item });
+
+  await pushToCloud(false);
+  render();
+  notify(`✓ Đã cộng điểm Ván ${item.match} cho ${item.team}`);
+}
+
+async function approveAllScores() {
+  if (!state.pendingResults.length) return notify("Không có lượt báo điểm nào đang chờ!");
+  await syncFromCloud(false);
+  const count = state.pendingResults.length;
+  state.pendingResults.forEach(item => {
+    const existIdx = state.results.findIndex(r => r.team === item.team && Number(r.match) === Number(item.match));
+    if (existIdx !== -1) state.results[existIdx] = { ...item };
+    else state.results.push({ ...item });
+  });
+  state.pendingResults = [];
+  await pushToCloud(false);
+  render();
+  notify(`✓ Đã duyệt tất cả ${count} lượt điểm!`);
+}
+
+async function rejectScore(id) {
+  await syncFromCloud(false);
+  state.pendingResults = state.pendingResults.filter(x => x.id !== id);
+  await pushToCloud(false);
+  render();
+  notify("Đã từ chối lượt báo điểm");
+}
+
+/* --- ADMIN: NHẬP ĐIỂM LẺ & NHẬP CẢ VÁN --- */
+function switchAdminEntryMode(mode) {
+  adminEntryMode = mode;
+  $("btnModeSingle").classList.toggle("active", mode === "single");
+  $("btnModeBatch").classList.toggle("active", mode === "batch");
+  $("adminSingleBox").style.display = mode === "single" ? "block" : "none";
+  $("adminBatchBox").style.display = mode === "batch" ? "block" : "none";
+  if (mode === "batch") renderAdminBatchRows();
+}
+
+function onAdminMatchChange() {
+  const m = $("adminMatchSelect").value;
+  $("adminMatchBadge").textContent = "VÁN " + m;
+  if (adminEntryMode === "batch") renderAdminBatchRows();
+}
+
+async function adminAddDirectResult() {
+  const team = $("adminTeamSelect").value;
+  const match = Number($("adminMatchSelect").value) || 1;
+  const top = Number($("adminPlacement").value);
+  const kill = Math.max(0, parseInt($("adminKills").value, 10) || 0);
+
+  if (!team) return notify("Vui lòng chọn một đội!");
+  if (!top || top < 1 || top > 12) return notify("Vui lòng chọn Thứ hạng (Top)!");
+
+  await syncFromCloud(false);
+  const record = {
+    id: "adm_" + Date.now(),
+    team,
+    match,
+    top,
+    kill,
+    time: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })
+  };
+
+  const existIdx = state.results.findIndex(r => r.team === team && Number(r.match) === match);
+  if (existIdx !== -1) state.results[existIdx] = record;
+  else state.results.push(record);
+
+  $("adminPlacement").value = "";
+  $("adminKills").value = "0";
+  await pushToCloud(false);
+  render();
+  notify(`✓ Đã lưu điểm Ván ${match} cho ${team}`);
+}
+
+function renderAdminBatchRows() {
+  const box = $("batchList");
+  if (!state.teams.length) {
+    box.innerHTML = `<div class="empty">Chưa có đội nào được duyệt.</div>`;
+    return;
+  }
+  const match = Number($("adminMatchSelect").value) || 1;
+  box.innerHTML = state.teams.map((t, idx) => {
+    const existing = state.results.find(r => r.team === t.name && Number(r.match) === match);
+    const curTop = existing ? existing.top : "";
+    const curKill = existing ? existing.kill : 0;
+    const opts = Array.from({ length: 12 }, (_, i) => i + 1)
+      .map(n => `<option value="${n}" ${curTop === n ? "selected" : ""}>Top ${n}${n === 1 ? " 🔥" : ""}</option>`)
+      .join("");
+    return `
+      <div class="batch-row" id="batchRow_${idx}">
+        <div class="batch-team" title="${esc(t.name)}">
+          <span>#${idx + 1}</span>
+          <span>${esc(t.name)}</span>
+        </div>
+        <div>
+          <select data-batch-top="${idx}" onchange="checkBatchDupTop()">
+            <option value="">-- Bỏ qua --</option>
+            ${opts}
+          </select>
+        </div>
+        <div class="batch-kill-box">
+          <button type="button" class="mini-btn" onclick="stepBatchKill(${idx}, -1)">−</button>
+          <input type="number" min="0" inputmode="numeric" data-batch-kill="${idx}" value="${curKill}">
+          <button type="button" class="mini-btn" onclick="stepBatchKill(${idx}, 1)">+</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function stepBatchKill(idx, delta) {
+  const inp = document.querySelector(`[data-batch-kill="${idx}"]`);
+  if (inp) inp.value = Math.max(0, (parseInt(inp.value, 10) || 0) + delta);
+}
+
+function checkBatchDupTop() {
+  const selects = [...document.querySelectorAll("[data-batch-top]")];
+  const counts = {};
+  selects.forEach(s => { if (s.value) counts[s.value] = (counts[s.value] || 0) + 1; });
+  selects.forEach((s, idx) => {
+    const row = $("batchRow_" + idx);
+    if (row) row.classList.toggle("dup-top", Boolean(s.value && counts[s.value] > 1));
+  });
+  return Object.values(counts).some(c => c > 1);
+}
+
+async function saveAdminBatchResults() {
+  if (!state.teams.length) return notify("Chưa có đội để lưu!");
+  if (checkBatchDupTop()) return notify("Cảnh báo: Có các đội đang bị trùng Thứ hạng (Top) màu đỏ!");
+
+  const match = Number($("adminMatchSelect").value) || 1;
+  await syncFromCloud(false);
+  let saved = 0;
+
+  state.teams.forEach((t, idx) => {
+    const topVal = document.querySelector(`[data-batch-top="${idx}"]`)?.value;
+    const killVal = document.querySelector(`[data-batch-kill="${idx}"]`)?.value;
+    if (!topVal) return;
+    const top = Number(topVal);
+    const kill = Math.max(0, parseInt(killVal, 10) || 0);
+    const rec = {
+      id: "batch_" + Date.now() + "_" + idx,
+      team: t.name,
+      match,
+      top,
+      kill,
+      time: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })
+    };
+    const existIdx = state.results.findIndex(r => r.team === t.name && Number(r.match) === match);
+    if (existIdx !== -1) state.results[existIdx] = rec;
+    else state.results.push(rec);
+    saved++;
+  });
+
+  if (!saved) return notify("Bạn chưa chọn Top cho đội nào!");
+  await pushToCloud(false);
+  render();
+  notify(`⚡ Đã lưu điểm ${saved} đội ở Ván ${match}!`);
+  showTab("rankPanel", document.querySelector('[data-tab="rankPanel"]'));
+}
+
+async function deleteOfficialResult(id) {
+  await syncFromCloud(false);
+  state.results = state.results.filter(r => r.id !== id);
+  await pushToCloud(false);
+  render();
+  notify("Đã xóa 1 lượt điểm");
+}
+
+/* --- ADMIN: QUẢN LÝ ĐỘI & CÀI ĐẶT --- */
+async function adminAddTeamDirect() {
+  const name = $("admNewTeamName").value.trim();
+  const captain = $("admNewTeamCap").value.trim();
+  if (!name) return notify("Vui lòng nhập tên đội!");
+
+  await syncFromCloud(false);
+  if (state.teams.some(t => t.name.toLowerCase() === name.toLowerCase())) {
+    return notify("Tên đội này đã có trên BXH!");
+  }
+  state.teams.push({ name, captain, logo: tempAdmLogo || "" });
+  $("admNewTeamName").value = "";
+  $("admNewTeamCap").value = "";
+  $("admLogoInput").value = "";
+  tempAdmLogo = "";
+  $("admLogoPreview").innerHTML = "🛡️";
+
+  await pushToCloud(false);
+  render();
+  notify(`Đã thêm trực tiếp đội: ${name}`);
+}
+
+function promptEditApprovedTeam(idx) {
+  const t = state.teams[idx];
+  if (!t) return;
+  openModal({
+    title: "Đổi Tên Đội Thi Đấu",
+    desc: `Nhập tên mới cho đội "${t.name}". Toàn bộ điểm số của đội sẽ được giữ nguyên:`,
+    confirmText: "Lưu tên mới",
+    inputConfig: { value: t.name, placeholder: "Nhập tên đội mới..." },
+    onConfirm: async newName => {
+      if (!newName || newName === t.name) return;
+      if (state.teams.some((x, i) => i !== idx && x.name.toLowerCase() === newName.toLowerCase())) {
+        return notify("Tên đội này đã tồn tại!");
+      }
+      const oldName = t.name;
+      state.teams[idx].name = newName;
+      state.results.forEach(r => { if (r.team === oldName) r.team = newName; });
+      state.pendingResults.forEach(r => { if (r.team === oldName) r.team = newName; });
+      await pushToCloud(false);
+      render();
+      notify("Đã cập nhật tên đội!");
+    }
+  });
+}
+
+function promptDeleteApprovedTeam(idx) {
+  const t = state.teams[idx];
+  if (!t) return;
+  openModal({
+    title: "Xóa Đội Khỏi Giải",
+    desc: `Bạn có chắc chắn muốn xóa đội "${t.name}" và toàn bộ điểm của đội này?`,
+    confirmText: "Xóa đội",
+    isDanger: true,
+    onConfirm: async () => {
+      state.teams.splice(idx, 1);
+      state.results = state.results.filter(r => r.team !== t.name);
+      await pushToCloud(false);
+      render();
+      notify(`Đã xóa đội ${t.name}`);
+    }
+  });
+}
+
+async function saveAdminSettings() {
+  const t = $("cfgTitle").value.trim();
+  const s = $("cfgSub").value.trim();
+  const p = $("cfgAdminPass").value.trim();
+  if (t) state.meta.title = t;
+  if (s) state.meta.sub = s;
+  if (p) state.meta.adminPass = p;
+  $("cfgAdminPass").value = "";
+  await pushToCloud(true);
+  render();
+}
+
+async function restoreDefaultRules() {
+  state.rules = { ...ruleDefaults };
+  applyRulesToInputs();
+  await pushToCloud(false);
+  render();
+  notify("Đã khôi phục bảng điểm chuẩn Free Fire!");
+}
+
+function promptResetTournament() {
+  openModal({
+    title: "XÓA SẠCH DỮ LIỆU GIẢI",
+    desc: "Toàn bộ danh sách đội, đơn chờ duyệt và bảng điểm trên Cloud sẽ bị xóa trắng để tạo giải mới. Bạn chắc chắn chứ?",
+    confirmText: "XÓA TẤT CẢ",
+    isDanger: true,
+    onConfirm: async () => {
+      state.teams = [];
+      state.pendingTeams = [];
+      state.results = [];
+      state.pendingResults = [];
+      await pushToCloud(false);
+      render();
+      notify("Đã làm mới toàn bộ dữ liệu giải đấu!");
+    }
+  });
+}
+
+/* --- TÍNH TOÁN & RENDER BẢNG XẾP HẠNG --- */
+function standings() {
+  const r = state.rules;
+  return state.teams.map(tObj => {
+    const teamResults = state.results.filter(x => x.team === tObj.name);
+    const kills = teamResults.reduce((s, x) => s + (Number(x.kill) || 0), 0);
+    const booyahs = teamResults.filter(x => Number(x.top) === 1).length;
+    const topPts = teamResults.reduce((s, x) => s + (Number(r["p" + x.top]) || 0), 0);
+    const killPts = kills * (Number(r.killPoint) || 0);
+    return {
+      team: tObj.name,
+      logo: tObj.logo || "",
+      captain: tObj.captain || "",
+      matches: teamResults.length,
+      booyahs,
+      kills,
+      top: topPts,
+      total: killPts + topPts
+    };
+  }).sort((a, b) =>
+    b.total - a.total ||
+    b.booyahs - a.booyahs ||
+    b.kills - a.kills ||
+    b.top - a.top ||
+    a.team.localeCompare(b.team, "vi")
+  );
+}
+
+function renderAvatarHtml(logo, fallbackEmoji) {
+  return logo ? `<img src="${logo}" alt="logo">` : fallbackEmoji;
+}
+
+function render() {
+  $("tourneyTitleText").textContent = state.meta.title;
+  $("tourneySubText").textContent = state.meta.sub;
+  if (document.activeElement !== $("cfgTitle")) $("cfgTitle").value = state.meta.title;
+  if (document.activeElement !== $("cfgSub")) $("cfgSub").value = state.meta.sub;
+
+  // Badge thông báo chờ duyệt
+  const totalPending = state.pendingTeams.length + state.pendingResults.length;
+  const badge = $("pendingBadge");
+  badge.textContent = totalPending;
+  badge.style.display = totalPending > 0 ? "inline-block" : "none";
+  $("pendingTeamsCount").textContent = state.pendingTeams.length + " ĐƠN";
+  $("pendingScoresCount").textContent = state.pendingResults.length + " LƯỢT";
+  $("rankCount").textContent = state.teams.length + " ĐỘI";
+  $("admApprovedCount").textContent = state.teams.length;
+  $("officialHistoryCount").textContent = state.results.length + " LƯỢT";
+
+  // Top 3 Podium
+  const s = standings();
+  const t1 = s[0] || { team: "—", total: 0, kills: 0, booyahs: 0, logo: "" };
+  const t2 = s[1] || { team: "—", total: 0, kills: 0, booyahs: 0, logo: "" };
+  const t3 = s[2] || { team: "—", total: 0, kills: 0, booyahs: 0, logo: "" };
+
+  $("podiumArea").innerHTML = `
+    <div class="podium-card rank2">
+      <div class="podium-rank">Hạng 2</div>
+      <div class="avatar">${renderAvatarHtml(t2.logo, "🥈")}</div>
+      <div class="team-title" title="${esc(t2.team)}">${esc(t2.team)}</div>
+      <div class="team-score">${t2.total} PTS</div>
+      <div class="team-submeta">${t2.kills} Kill • ${t2.booyahs} 🔥</div>
+    </div>
+    <div class="podium-card rank1">
+      <div class="crown">👑</div>
+      <div class="podium-rank">Quán Quân</div>
+      <div class="avatar">${renderAvatarHtml(t1.logo, "🥇")}</div>
+      <div class="team-title" title="${esc(t1.team)}">${esc(t1.team)}</div>
+      <div class="team-score">${t1.total} PTS</div>
+      <div class="team-submeta">${t1.kills} Kill • ${t1.booyahs} 🔥</div>
+    </div>
+    <div class="podium-card rank3">
+      <div class="podium-rank">Hạng 3</div>
+      <div class="avatar">${renderAvatarHtml(t3.logo, "🥉")}</div>
+      <div class="team-title" title="${esc(t3.team)}">${esc(t3.team)}</div>
+      <div class="team-score">${t3.total} PTS</div>
+      <div class="team-submeta">${t3.kills} Kill • ${t3.booyahs} 🔥</div>
+    </div>
+  `;
+
+  // Bảng xếp hạng chi tiết
+  $("rankBody").innerHTML = s.length ? s.map((x, i) => {
+    const badgeClass = i === 0 ? "rank-1" : i === 1 ? "rank-2" : i === 2 ? "rank-3" : "";
+    const logoCell = x.logo ? `<img src="${x.logo}" alt="">` : "🛡️";
+    return `
+      <tr>
+        <td><span class="rank-badge ${badgeClass}">${i + 1}</span></td>
+        <td>
+          <div class="teamcell-wrap">
+            <div class="tbl-logo">${logoCell}</div>
+            <span class="teamcell-name">${esc(x.team)}</span>
+          </div>
+        </td>
+        <td>${x.matches}</td>
+        <td class="booyah-cell">${x.booyahs}</td>
+        <td>${x.kills}</td>
+        <td>${x.top}</td>
+        <td class="score">${x.total}</td>
+      </tr>
+    `;
+  }).join("") : `<tr><td colspan="7" class="empty">Chưa có đội thi đấu chính thức.</td></tr>`;
+
+  // Giữ nguyên lựa chọn dropdown khi đồng bộ ngầm
+  const prevPlayerTeam = $("playerTeamSelect").value;
+  const prevAdminTeam = $("adminTeamSelect").value;
+  const teamOpts = state.teams.length
+    ? `<option value="">-- Chọn đội thi đấu --</option>` + state.teams.map(t => `<option value="${esc(t.name)}">${esc(t.name)}</option>`).join("")
+    : `<option value="">Chưa có đội nào được duyệt</option>`;
+  $("playerTeamSelect").innerHTML = teamOpts;
+  $("adminTeamSelect").innerHTML = teamOpts;
+  if (state.teams.some(t => t.name === prevPlayerTeam)) $("playerTeamSelect").value = prevPlayerTeam;
+  if (state.teams.some(t => t.name === prevAdminTeam)) $("adminTeamSelect").value = prevAdminTeam;
+
+  // Danh sách trạng thái đăng ký đội (Công khai)
+  const allRegs = [
+    ...state.pendingTeams.map(t => ({ ...t, status: "pending" })),
+    ...state.teams.map(t => ({ ...t, status: "approved" }))
+  ];
+  $("publicRegStatusList").innerHTML = allRegs.length ? allRegs.map(t => `
+    <div class="item-card">
+      <div class="item-left">
+        <div class="mini-logo">${t.logo ? `<img src="${t.logo}">` : "🛡️"}</div>
+        <div>
+          <div class="item-title">${esc(t.name)}</div>
+          <div class="item-sub">Liên hệ: ${esc(t.captain || "—")}</div>
+        </div>
+      </div>
+      <span class="count" style="${t.status === 'pending' ? 'color:var(--gold);border-color:rgba(255,204,77,0.4);background:rgba(255,204,77,0.1)' : ''}">
+        ${t.status === "pending" ? "⏳ Chờ duyệt" : "✓ Chính thức"}
+      </span>
+    </div>
+  `).join("") : `<div class="empty">Chưa có đội nào gửi đăng ký.</div>`;
+
+  // Danh sách báo điểm đang chờ duyệt (Công khai)
+  $("publicPendingScoreList").innerHTML = state.pendingResults.length ? [...state.pendingResults].reverse().map(r => `
+    <div class="item-card">
+      <div class="item-left">
+        <div class="mini-logo">V${r.match}</div>
+        <div>
+          <div class="item-title">${esc(r.team)}</div>
+          <div class="item-sub">Top ${r.top} • ${r.kill} Kill ${r.note ? `(${esc(r.note)})` : ""}</div>
+        </div>
+      </div>
+      <span class="count" style="color:var(--gold);border-color:rgba(255,204,77,0.4);background:rgba(255,204,77,0.1)">⏳ Chờ duyệt</span>
+    </div>
+  `).join("") : `<div class="empty">Tất cả các lượt báo điểm đã được xử lý.</div>`;
+
+  // Danh sách Chờ duyệt Đội (Tab Admin)
+  $("pendingTeamsList").innerHTML = state.pendingTeams.length ? state.pendingTeams.map(t => `
+    <div class="item-card">
+      <div class="item-left">
+        <div class="mini-logo">${t.logo ? `<img src="${t.logo}">` : "🛡️"}</div>
+        <div>
+          <div class="item-title">${esc(t.name)}</div>
+          <div class="item-sub">LH: ${esc(t.captain)} • Lúc ${t.time || ""}</div>
+        </div>
+      </div>
+      <div class="item-actions">
+        <button class="successbtn btn sm-btn" onclick="approveTeam('${t.id}')">✓ Duyệt</button>
+        <button class="danger btn sm-btn" onclick="rejectTeam('${t.id}')">✕</button>
+      </div>
+    </div>
+  `).join("") : `<div class="empty">Không có đơn đăng ký đội nào đang chờ.</div>`;
+
+  // Danh sách Chờ duyệt Điểm (Tab Admin)
+  $("pendingScoresList").innerHTML = state.pendingResults.length ? state.pendingResults.map(r => {
+    const pts = r.kill * (Number(state.rules.killPoint) || 0) + (Number(state.rules["p" + r.top]) || 0);
+    return `
+      <div class="item-card">
+        <div class="item-left">
+          <div class="mini-logo">V${r.match}</div>
+          <div>
+            <div class="item-title">${esc(r.team)} <span style="color:var(--green);font-size:12px">(+${pts}đ)</span></div>
+            <div class="item-sub">Báo: <b>Top ${r.top}</b> • <b>${r.kill} Kill</b> ${r.note ? `• "${esc(r.note)}"` : ""} (${r.time || ""})</div>
+          </div>
+        </div>
+        <div class="item-actions">
+          <button class="successbtn btn sm-btn" onclick="approveScore('${r.id}')">✓ Cộng</button>
+          <button class="danger btn sm-btn" onclick="rejectScore('${r.id}')">✕</button>
+        </div>
+      </div>
+    `;
+  }).join("") : `<div class="empty">Không có lượt báo điểm nào đang chờ.</div>`;
+
+  // Lịch sử điểm chính thức (Tab Admin)
+  $("officialHistoryList").innerHTML = state.results.length ? [...state.results].reverse().map(r => {
+    const pts = r.kill * (Number(state.rules.killPoint) || 0) + (Number(state.rules["p" + r.top]) || 0);
+    return `
+      <div class="item-card">
+        <div class="item-left">
+          <div class="mini-logo">V${r.match}</div>
+          <div>
+            <div class="item-title">${esc(r.team)}</div>
+            <div class="item-sub">Top ${r.top} • ${r.kill} Kill <b style="color:var(--green)">(+${pts}đ)</b></div>
+          </div>
+        </div>
+        <button class="danger btn sm-btn" onclick="deleteOfficialResult('${r.id}')">✕ Xóa</button>
+      </div>
+    `;
+  }).join("") : `<div class="empty">Chưa có lịch sử điểm chính thức.</div>`;
+
+  // Danh sách đội đã duyệt (Tab Quản lý Admin)
+  $("approvedTeamsAdminList").innerHTML = state.teams.length ? state.teams.map((t, idx) => `
+    <div class="item-card">
+      <div class="item-left">
+        <div class="mini-logo">${t.logo ? `<img src="${t.logo}">` : "🛡️"}</div>
+        <div>
+          <div class="item-title">${esc(t.name)}</div>
+          <div class="item-sub">LH: ${esc(t.captain || "—")}</div>
+        </div>
+      </div>
+      <div class="item-actions">
+        <button class="secondary btn sm-btn" onclick="promptEditApprovedTeam(${idx})">✎ Sửa</button>
+        <button class="danger btn sm-btn" onclick="promptDeleteApprovedTeam(${idx})">✕</button>
+      </div>
+    </div>
+  `).join("") : `<div class="empty">Chưa có đội nào được duyệt.</div>`;
+}
+
+function buildRulesUI() {
+  $("ruleGrid").innerHTML = Array.from({ length: 12 }, (_, i) => i + 1).map(i => `
+    <div class="field">
+      <label>TOP ${i}</label>
+      <input id="p${i}" type="number" min="0" value="${ruleDefaults["p" + i]}">
+    </div>
+  `).join("");
+
+  Object.keys(ruleDefaults).forEach(k => {
+    $(k).addEventListener("change", () => {
+      state.rules[k] = Math.max(0, Number($(k).value) || 0);
+      pushToCloud(false);
+      render();
     });
+  });
 }
 
-function promptReset(){
-    showModal("LÀM MỚI GIẢI ĐẤU", "Xóa sạch toàn bộ danh sách đội và kết quả hiện tại?", "XÓA TẤT CẢ", () => {
-        teams=[];results=[];localStorage.removeItem('ntt_teams');localStorage.removeItem('ntt_results');localStorage.removeItem('ntt_rules');Object.keys(ruleDefaults).forEach(k=>$(k).value=ruleDefaults[k]);render();notify('Đã làm mới toàn bộ giải đấu!');
+function applyRulesToInputs() {
+  Object.keys(ruleDefaults).forEach(k => {
+    if ($(k)) $(k).value = state.rules[k] ?? ruleDefaults[k];
+  });
+}
+
+/* --- XUẤT ẢNH HD, COPY TEXT, EXCEL & BACKUP JSON --- */
+function copyTextStandings() {
+  const s = standings();
+  if (!s.length) return notify("Chưa có dữ liệu trên BXH để sao chép!");
+  const lines = [
+    `🏆 ${state.meta.title} 🏆`,
+    `📌 ${state.meta.sub}`,
+    `------------------------`,
+    ...s.map((x, i) => {
+      const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `#${i + 1}`;
+      return `${medal} ${x.team} — ${x.total}đ (${x.kills} Kill, ${x.booyahs} Booyah)`;
+    })
+  ];
+  navigator.clipboard.writeText(lines.join("\n"))
+    .then(() => notify("📋 Đã copy BXH! Dán ngay vào Zalo/Messenger."))
+    .catch(() => notify("Không thể truy cập bộ nhớ tạm!"));
+}
+
+function exportCSV() {
+  const s = standings();
+  if (!s.length) return notify("Chưa có dữ liệu để xuất CSV!");
+  const rows = [
+    ["Hang", "Ten doi", "So tran", "Booyah", "Kill", "Diem Top", "Tong diem"],
+    ...s.map((x, i) => [i + 1, x.team, x.matches, x.booyahs, x.kills, x.top, x.total])
+  ];
+  const csv = "\uFEFF" + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  a.download = "NTT_Bang_Xep_Hang.csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  notify("Đã tải xuống file Excel/CSV!");
+}
+
+function backupJSON() {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], { type: "application/json" }));
+  a.download = "NTT_Esports_Backup.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  notify("Đã tải file sao lưu JSON!");
+}
+
+function restoreJSON(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async ev => {
+    try {
+      const parsed = JSON.parse(ev.target.result);
+      if (!mergeIncomingData(parsed)) throw new Error("Invalid format");
+      applyRulesToInputs();
+      await pushToCloud(true);
+      render();
+    } catch (err) {
+      notify("File JSON không đúng định dạng!");
+    }
+    e.target.value = "";
+  };
+  reader.readAsText(file);
+}
+
+function exportImage() {
+  if (!state.teams.length) return notify("Cần ít nhất 1 đội trên BXH để xuất ảnh!");
+  showTab("rankPanel", document.querySelector('[data-tab="rankPanel"]'));
+  notify("📸 Đang tạo ảnh BXH chuẩn HD kèm Logo...");
+
+  const appEl = $("appContainer");
+  window.scrollTo(0, 0);
+  appEl.classList.add("exporting-mode");
+
+  setTimeout(() => {
+    html2canvas(appEl, {
+      backgroundColor: "#050811",
+      scale: 2,
+      width: 720,
+      windowWidth: 720,
+      scrollX: 0,
+      scrollY: 0,
+      useCORS: true,
+      logging: false
+    }).then(canvas => {
+      appEl.classList.remove("exporting-mode");
+      const a = document.createElement("a");
+      a.download = "NTT_Global_Leaderboard.png";
+      a.href = canvas.toDataURL("image/png");
+      a.click();
+      notify("📸 Đã tải ảnh BXH sắc nét!");
+    }).catch(() => {
+      appEl.classList.remove("exporting-mode");
+      notify("Có lỗi xảy ra khi xuất ảnh!");
     });
+  }, 150);
 }
 
-function exportCSV(){let s=standings();if(!s.length)return notify('Chưa có dữ liệu để xuất!');let rows=[['Hang','Ten doi','Tran','Kill','Diem Top','Tong diem'],...s.map((x,i)=>[i+1,x.team,x.matches,x.kills,x.top,x.total])];let csv='\uFEFF'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='NTT_bang_xep_hang.csv';a.click();URL.revokeObjectURL(a.href);notify('Đã xuất file CSV')}
+/* --- KHỞI CHẠY HỆ THỐNG --- */
+buildRulesUI();
+loadLocal();
+applyRulesToInputs();
+$("cloudUrlInput").value = cloudUrl;
+render();
 
-// --- HÀM XUẤT ẢNH ĐÃ FIX TRIỆT ĐỂ LỖI TỐI MỜ & MẤT CỘT ---
-function exportImage(){
-    if(!teams.length) return notify('Cần ít nhất 1 đội để xuất ảnh!');
-    
-    // Đảm bảo đang đứng ở tab Bảng xếp hạng khi chụp
-    showTab('rankPanel', document.querySelector('[data-tab="rankPanel"]'));
-    notify('Đang xuất ảnh HD sắc nét...');
-
-    const appEl = $('appContainer');
-    window.scrollTo(0, 0);
-    
-    // Bật chế độ xuất ảnh chuyên dụng (mở rộng khung 680px, tắt animation/opacity, hiện đủ 6 cột)
-    appEl.classList.add('exporting-mode');
-
-    setTimeout(() => {
-        html2canvas(appEl, {
-            backgroundColor: '#060a13',
-            scale: 2,
-            width: 680,
-            windowWidth: 680,
-            scrollX: 0,
-            scrollY: 0,
-            useCORS: true,
-            logging: false
-        }).then(canvas => {
-            appEl.classList.remove('exporting-mode');
-            let a = document.createElement('a');
-            a.download = 'NTT_Global_Leaderboard.png';
-            a.href = canvas.toDataURL('image/png');
-            a.click();
-            notify('📸 Đã tải ảnh BXH sắc nét!');
-        }).catch(err => {
-            appEl.classList.remove('exporting-mode');
-            notify('Có lỗi xảy ra khi tạo ảnh!');
-            console.error(err);
-        });
-    }, 150);
-}
-
-buildRules();load();render();
-Object.keys(ruleDefaults).forEach(k=>$(k).addEventListener('input',()=>{save();render()}));
-$('teamName').addEventListener('keydown',e=>{if(e.key==='Enter')addTeam()});
-$('killPoint').addEventListener('input',()=>{save();render()});
+// Đồng bộ ngay khi mở trang và tự động làm mới mỗi 10 giây
+syncFromCloud(false);
+setInterval(() => {
+  if (!document.hidden) syncFromCloud(false);
+}, 10000);
 </script>
 </body>
 </html>
